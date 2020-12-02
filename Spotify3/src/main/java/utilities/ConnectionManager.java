@@ -12,7 +12,7 @@ public class ConnectionManager {
 	private static EntityManager manager=null;
 
 	public static EntityManager getManager(){
-		if(manager!=null){
+		if(manager==null){
 			getConection();
 			manager=emf.createEntityManager();
 		}

@@ -14,7 +14,7 @@ public class Options {
 	private TypeBDD typeBDD;
 
 	public Options() {
-		// TODO Auto-generated constructor stub
+		this(TypeBDD.H2);
 	}
 
 	public Options(TypeBDD typeBDD) {
