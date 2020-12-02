@@ -1,11 +1,54 @@
 package model;
 
+import java.awt.List;
+import java.util.ArrayList;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
+@Entity
 public class Song {
+
+	@Id
+	@Column(name="ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+
+	@Column(name="NAME", nullable=false)
 	private String name;
+
+	@Column(name="Duration")
 	private int duration;
+
+	//1:N
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="ID_GENRE")
 	private Genre genre;
+
+	//1:M
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="ID_DISC")
 	private Disc disc;
+
+	//N:M playlist
+	@JoinTable(
+			name="rel_song_playlist",
+			joinColumns = @JoinColumn(name = "FK_SONG", nullable=false),
+			inverseJoinColumns = @JoinColumn(name="FK_Playlist", nullable=false)
+			)
+	@ManyToMany(cascade= CascadeType.ALL)
+	private ArrayList<Playlist> playlists = new ArrayList<Playlist>();
+
 
 	public Song(){
 		this(-1,"",0,null,null);
