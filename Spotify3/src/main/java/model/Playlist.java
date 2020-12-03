@@ -39,7 +39,7 @@ public class Playlist{
 
 
 	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinTable(name="ID:_USER")
+	@JoinColumn(name="ID:_USER")
 	private User creator;
 
 	//N:M suscribers
