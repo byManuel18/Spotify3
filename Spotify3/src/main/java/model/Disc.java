@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -30,10 +31,15 @@ public class Disc implements Serializable {
 	private int id;
 	@Column(name="Name")
 	private String name;
+
 	@Column(name="Artist")
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="Id_Artist")
 	private Artist artist;
+
 	@Column(name="photo")
 	private String photo;
+
 	@Column(name="date")
 	private LocalDate date;
 
