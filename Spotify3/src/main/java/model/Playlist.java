@@ -1,15 +1,64 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import javassist.expr.NewArray;
+
+@Entity
+@Table(name="Playlist")
 public class Playlist{
+
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@Column(name="ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+
+	@Column(name="NAME")
 	private String name;
+
+	@Column(name="DESCRIPTION")
 	private String description;
+
+
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinTable(name="ID:_USER")
 	private User creator;
-	private Set<User> subscribers=new HashSet<User>();
-	private Set<Song> songs=new HashSet<Song>();
+
+	//N:M suscribers
+	@JoinTable(
+			name="rel_playlist_user",
+			joinColumns = @JoinColumn(name="FK_Playlist",nullable=false),
+			inverseJoinColumns = @JoinColumn(name="FK_User",nullable=false)
+			)
+	@ManyToMany(cascade=CascadeType.ALL)
+	private List<User> subscribers=new ArrayList<User>();
+
+	//N:M songs
+	@JoinTable(
+			name="rel_playlist_song",
+			joinColumns = @JoinColumn(name="FK_Playlist",nullable=false),
+			inverseJoinColumns = @JoinColumn(name="Fk_Song",nullable=false)
+			)
+	@ManyToMany(cascade=CascadeType.ALL)
+	private List<Song> songs=new ArrayList<Song>();
 
 	public Playlist(){
 		this(-1,"","",null);
@@ -59,20 +108,20 @@ public class Playlist{
 	}
 
 
-	public Set<User> getSubscribers() {
+	public List<User> getSubscribers() {
 		return subscribers;
 	}
 
-	public void setSubscribers(Set<User> subscribers) {
+	public void setSubscribers(List<User> subscribers) {
 		this.subscribers = subscribers;
 	}
 
 
-	public Set<Song> getSongs() {
+	public List<Song> getSongs() {
 		return songs;
 	}
 
-	public void setSongs(Set<Song> songs) {
+	public void setSongs(List<Song> songs) {
 		this.songs = songs;
 	}
 
