@@ -21,11 +21,12 @@ public class App{
 
 
     public static void main( String[] args ){
+    	Genre g1=new Genre("Si");
+    	ConnectionManager.getOpcion().setTypeBDD(TypeBDD.MySQL);
 
     	ConnectionManager.getManager().getTransaction().begin();
-    	System.out.println(ConnectionManager.getManager().find(Genre.class, 1));
+    	System.out.println(ConnectionManager.getManager().find(Genre.class,1));
     	ConnectionManager.getManager().getTransaction().commit();
-
     	ConnectionManager.CloseAllConection();
 
     }
