@@ -1,14 +1,40 @@
 package model;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-public class Artist {
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="ARTIST")
+public class Artist implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@Column(name="ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	
+	@Column(name="NAME")
 	private String name;
+	@Column(name="NATIONALITY")
 	private String nationality;
+	@Column(name="PHOTO")
 	private String photo;
-	private Set<Disc> disclist;
+	@OneToMany(mappedBy = "artist",cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	private List<Disc> disclist;
 
 	public Artist() {
 		this(-1, "", "", "");
@@ -23,7 +49,7 @@ public class Artist {
 		this.name = name;
 		this.nationality = nationality;
 		this.photo = photo;
-		this.disclist=new HashSet<Disc>();
+		this.disclist=new ArrayList<Disc>();
 	}
 
 
@@ -67,12 +93,12 @@ public class Artist {
 	}
 
 
-	public Set<Disc> getDisclist() {
+	public List<Disc> getDisclist() {
 		return disclist;
 	}
 
 
-	public void setDisclist(Set<Disc> disclist) {
+	public void setDisclist(List<Disc> disclist) {
 		this.disclist = disclist;
 	}
 
