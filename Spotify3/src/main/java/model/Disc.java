@@ -1,17 +1,48 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Disc {
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="Disc")
+public class Disc implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="Id")
 	private int id;
+	@Column(name="Name")
 	private String name;
+	@Column(name="Artist")
 	private Artist artist;
+	@Column(name="photo")
 	private String photo;
+	@Column(name="date")
 	private LocalDate date;
-	private Set<Song> songlist;
+
+	//1:N
+	@OneToMany(mappedBy = "disc",
+			cascade = CascadeType.ALL,
+			fetch = FetchType.LAZY)
+	@Column(name="songlist")
+	private List<Song> songlist;
 
 
 	public Disc() {
@@ -22,15 +53,16 @@ public class Disc {
 		this(-1, name,artist,photo,date);
 	}
 
+
 	public Disc(int id, String name, Artist artist, String photo, LocalDate date) {
+		super();
 		this.id = id;
 		this.name = name;
 		this.artist = artist;
 		this.photo = photo;
 		this.date = date;
-		this.songlist = new HashSet<Song>();
+		this.songlist = new ArrayList<Song>();
 	}
-
 
 	public int getId() {
 		return id;
@@ -72,14 +104,13 @@ public class Disc {
 		this.date = date;
 	}
 
-	public Set<Song> getSonglist() {
+	public List<Song> getSonglist() {
 		return songlist;
 	}
 
-	public void setSonglist(Set<Song> songlist) {
+	public void setSonglist(List<Song> songlist) {
 		this.songlist = songlist;
 	}
-
 
 	@Override
 	public int hashCode() {
