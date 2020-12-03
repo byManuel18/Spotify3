@@ -13,6 +13,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -34,6 +35,7 @@ public class Artist implements Serializable{
 	@Column(name="PHOTO")
 	private String photo;
 	@OneToMany(mappedBy = "artist",cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@JoinColumn(name="DISCLIST")
 	private List<Disc> disclist;
 
 	public Artist() {
