@@ -45,6 +45,10 @@ public class User implements Serializable{
 	@ManyToMany(cascade=CascadeType.ALL)
 	private List<Playlist> subscriptions=new ArrayList<Playlist>();
 
+	//1:N
+	@OneToMany(mappedBy="creator",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+	private List<Playlist> playlistCreates=new ArrayList<Playlist>();
+
 	public User(){
 		this(-1,"","","",true);
 	}
@@ -95,7 +99,6 @@ public class User implements Serializable{
 	}
 
 
-
 	public List<Playlist> getSubscriptions() {
 		return subscriptions;
 	}
@@ -112,29 +115,16 @@ public class User implements Serializable{
 		this.active = active;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((mail == null) ? 0 : mail.hashCode());
-		return result;
+
+	public List<Playlist> getPlaylistCreates() {
+		return playlistCreates;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		User other = (User) obj;
-		if (mail == null) {
-			if (other.mail != null)
-				return false;
-		} else if (!mail.equals(other.mail))
-			return false;
-		return true;
+	public void setPlaylistCreates(List<Playlist> playlistCreates) {
+		this.playlistCreates = playlistCreates;
+		for(Playlist pl:this.playlistCreates){
+			pl.setCreator(this);
+		}
 	}
 
 	@Override

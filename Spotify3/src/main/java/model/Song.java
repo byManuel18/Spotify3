@@ -1,8 +1,8 @@
 package model;
 
-import java.awt.List;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -36,7 +36,7 @@ public class Song implements Serializable{
 	private int duration;
 
 	//1:N
-	@ManyToOne(fetch=FetchType.EAGER)
+	@ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
 	@JoinColumn(name="ID_GENRE")
 	private Genre genre;
 
@@ -45,14 +45,14 @@ public class Song implements Serializable{
 	@JoinColumn(name="ID_DISC")
 	private Disc disc;
 
-	//N:M playlist
-	//@JoinTable(
-	//		name="rel_song_playlist",
-	//		joinColumns = @JoinColumn(name = "ID_SONG", nullable=false),
-	//		inverseJoinColumns = @JoinColumn(name="id_Playlist", nullable=false)
-	//		)
-	//@ManyToMany(cascade= CascadeType.ALL)
-	//private ArrayList<Playlist> playlists = new ArrayList<Playlist>();
+	/*//N:M playlist
+	@JoinTable(
+		name="rel_song_playlist",
+		joinColumns = @JoinColumn(name = "ID_SONG", nullable=false),
+		inverseJoinColumns = @JoinColumn(name="id_Playlist", nullable=false)
+			)
+	@ManyToMany(cascade= CascadeType.ALL,fetch=FetchType.LAZY)
+	private List<Playlist> playlists = new ArrayList<Playlist>();*/
 
 
 	public Song(){
@@ -70,6 +70,15 @@ public class Song implements Serializable{
 		this.genre = genre;
 		this.disc = disc;
 	}
+
+	/*public List<Playlist> getPlaylists() {
+		return playlists;
+	}
+
+	public void setPlaylists(List<Playlist> playlists) {
+		this.playlists = playlists;
+		List<Song> ls=this.playlists.
+	}*/
 
 	public int getId() {
 		return id;
@@ -109,13 +118,19 @@ public class Song implements Serializable{
 
 	public void setDisc(Disc disc) {
 		this.disc = disc;
+		List<Song> ls=this.disc.getSonglist();
+		if(ls==null){
+			ls=new ArrayList<Song>();
+		}
+		if(!ls.contains(this)){
+			ls.add(this);
+		}
 	}
 
 
 	@Override
 	public String toString() {
-		return "Song [id=" + id + ", name=" + name + ", duration=" + duration + ", genre=" + genre + ", disc=" + disc
-				+ "]";
+		return "Song [id=" + id + ", name=" + name + ", duration=" + duration + ", genre=" + genre;
 	}
 
 

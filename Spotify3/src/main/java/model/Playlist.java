@@ -106,6 +106,13 @@ public class Playlist implements Serializable{
 
 	public void setCreator(User creator) {
 		this.creator = creator;
+		List<Playlist> lp=this.creator.getPlaylistCreates();
+		if(lp==null){
+			lp=new ArrayList<Playlist>();
+		}
+		if(!lp.contains(this)){
+			lp.add(this);
+		}
 	}
 
 
@@ -127,30 +134,8 @@ public class Playlist implements Serializable{
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + id;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Playlist other = (Playlist) obj;
-		if (id != other.id)
-			return false;
-		return true;
-	}
-
-	@Override
 	public String toString() {
-		return "Playlist [id=" + id + ", name=" + name + ", description=" + description + ", creator=" + creator + "]";
+		return "Playlist [id=" + id + ", name=" + name + ", description=" + description;
 	}
 
 

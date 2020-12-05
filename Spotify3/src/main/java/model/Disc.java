@@ -89,6 +89,13 @@ public class Disc implements Serializable {
 
 	public void setArtist(Artist artist) {
 		this.artist = artist;
+		List<Disc> ld=this.artist.getDisclist();
+		if(ld==null){
+			ld=new ArrayList<Disc>();
+		}
+		if(!ld.contains(this)){
+			ld.add(this);
+		}
 	}
 
 	public String getPhoto() {
@@ -113,6 +120,9 @@ public class Disc implements Serializable {
 
 	public void setSonglist(List<Song> songlist) {
 		this.songlist = songlist;
+		for(Song s:this.songlist){
+			s.setDisc(this);
+		}
 	}
 
 	@Override
