@@ -6,7 +6,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import com.mysql.cj.jdbc.SuspendableXAConnection;
+
 import DAO.GenreDAO;
+import DAOImpl.GenreDAOImpl;
 import enums.TypeBDD;
 import model.Genre;
 import model.Options;
@@ -22,14 +25,12 @@ public class App{
 
 
     public static void main( String[] args ){
-    	Genre g1=new Genre("Si");
 
-    	ConnectionManager.getManager().getTransaction().begin();
-    	ConnectionManager.getManager().getTransaction().commit();;
-    	ConnectionManager.CloseAllConection();
-    	if(ConnectionManager.getManager()!=null){
-    		System.out.println("No es nulo :((");
+    	if(GenreDAOImpl.Exist("pedro")){
+    		System.out.println("Existe");
     	}
+    	ConnectionManager.CloseAllConection();
+
 
     }
 }

@@ -1,11 +1,9 @@
 package DAOImpl;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+
+import java.util.List;
 import javax.persistence.Query;
 import DAO.GenreDAO;
 import enums.SentenciasGenre;
@@ -13,15 +11,7 @@ import model.Genre;
 import utilities.ConnectionManager;
 
 
-@NamedQueries({
-    @NamedQuery(name="Genre.findAll",
-                query="SELECT g FROM GENRE g"),
-    @NamedQuery(name="Genre.exist",
-    query="SELECT g FROM GENRE g WHERE g.nombre= :name"),
-
-})
 public class GenreDAOImpl extends GenreDAO{
-
 
 	/**
 	 *
@@ -36,7 +26,7 @@ public class GenreDAOImpl extends GenreDAO{
 	public static boolean Exist(String  name){
 		boolean result=false;
 		ConnectionManager.getManager().getTransaction().begin();
-		Query query = ConnectionManager.getManager().createNamedQuery("Genre.exist");
+		Query query = ConnectionManager.getManager().createNamedQuery("Genre_exist",Genre.class);
 		query.setParameter("name",name);
 		Genre g=(Genre)query.getSingleResult();
 		ConnectionManager.getManager().getTransaction().commit();
@@ -67,7 +57,7 @@ public class GenreDAOImpl extends GenreDAO{
 		List<Genre> listgs=new ArrayList<Genre>();
 		ConnectionManager.getManager().getTransaction().begin();
 		if(sql==SentenciasGenre.SELECTALL){
-			query = ConnectionManager.getManager().createNamedQuery("Genre.findAll");
+			query = ConnectionManager.getManager().createNamedQuery("Genre_findAll",Genre.class);
 		}
 		listgs.addAll((List<Genre>)query.getResultList());
 		ConnectionManager.getManager().getTransaction().commit();

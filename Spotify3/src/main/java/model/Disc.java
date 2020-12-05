@@ -32,7 +32,7 @@ public class Disc implements Serializable {
 	@Column(name="Name")
 	private String name;
 
-	@Column(name="Artist")
+
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="Id_Artist")
 	private Artist artist;
@@ -44,10 +44,7 @@ public class Disc implements Serializable {
 	private LocalDate date;
 
 	//1:N
-	@OneToMany(mappedBy = "disc",
-			cascade = CascadeType.ALL,
-			fetch = FetchType.LAZY)
-	@Column(name="songlist")
+	@OneToMany(mappedBy = "disc",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	private List<Song> songlist;
 
 

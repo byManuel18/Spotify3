@@ -37,12 +37,15 @@ public class ConnectionManager {
 	private static void CloseEntityManagerFactory(){
 		if(emf!=null){
 			emf.close();
+			emf=null;
+
 		}
 
 	}
 	public static void CloseEntityManager(){
 		if(manager!=null){
 			manager.close();
+			manager=null;
 		}
 	}
 

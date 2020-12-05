@@ -20,14 +20,14 @@ import javax.persistence.Table;
 @Entity
 @Table(name="ARTIST")
 public class Artist implements Serializable{
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@Column(name="ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
 	@Column(name="NAME")
 	private String name;
 	@Column(name="NATIONALITY")
@@ -35,7 +35,6 @@ public class Artist implements Serializable{
 	@Column(name="PHOTO")
 	private String photo;
 	@OneToMany(mappedBy = "artist",cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	@JoinColumn(name="DISCLIST")
 	private List<Disc> disclist;
 
 	public Artist() {

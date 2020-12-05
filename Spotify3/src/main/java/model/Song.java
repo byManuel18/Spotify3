@@ -46,13 +46,13 @@ public class Song implements Serializable{
 	private Disc disc;
 
 	//N:M playlist
-	@JoinTable(
-			name="rel_song_playlist",
-			joinColumns = @JoinColumn(name = "FK_SONG", nullable=false),
-			inverseJoinColumns = @JoinColumn(name="FK_Playlist", nullable=false)
-			)
-	@ManyToMany(cascade= CascadeType.ALL)
-	private ArrayList<Playlist> playlists = new ArrayList<Playlist>();
+	//@JoinTable(
+	//		name="rel_song_playlist",
+	//		joinColumns = @JoinColumn(name = "ID_SONG", nullable=false),
+	//		inverseJoinColumns = @JoinColumn(name="id_Playlist", nullable=false)
+	//		)
+	//@ManyToMany(cascade= CascadeType.ALL)
+	//private ArrayList<Playlist> playlists = new ArrayList<Playlist>();
 
 
 	public Song(){
@@ -111,27 +111,6 @@ public class Song implements Serializable{
 		this.disc = disc;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + id;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Song other = (Song) obj;
-		if (id != other.id)
-			return false;
-		return true;
-	}
 
 	@Override
 	public String toString() {

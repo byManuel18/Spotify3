@@ -5,6 +5,7 @@
              version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
 
   <persistence-unit name="H2">
+  <class>model.Genre</class>
     <properties>
         <property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
         <property name="javax.persistence.jdbc.url" value="jdbc:h2:./Spotify3" /> <!-- ~/Desktop/test   mem:test  -->
@@ -17,6 +18,7 @@
   </persistence-unit>
 
   <persistence-unit name="MySQL">
+  <class>model.Genre</class>
 	<properties>
 		<property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/Spotify3?serverTimezone=UTC" />

@@ -73,9 +73,10 @@ public class GenreDAO extends Genre{
 	 */
 	public int update(){
 		int result=-1;
+		Genre n=new Genre(this.getId(), this.getName());
 		ConnectionManager.getManager().getTransaction().begin();
-			ConnectionManager.getManager().persist(this);
-			result=1;
+		ConnectionManager.getManager().persist(n);
+		result=1;
 		ConnectionManager.getManager().getTransaction().commit();
 
 		return result;
@@ -87,11 +88,12 @@ public class GenreDAO extends Genre{
 	 */
 	public int delete(){
 		int result=0;
+		Genre n=new Genre(this.getId(), this.getName());;
 		ConnectionManager.getManager().getTransaction().begin();
-		ConnectionManager.getManager().remove(this);
+		ConnectionManager.getManager().remove(n);
 		result=1;
 		ConnectionManager.getManager().getTransaction().commit();
-		return 0;
+		return result;
 	}
 
 
