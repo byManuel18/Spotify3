@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -22,7 +23,7 @@ import javassist.expr.NewArray;
 
 @Entity
 @Table(name="Playlist")
-public class Playlist{
+public class Playlist implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
@@ -39,14 +40,14 @@ public class Playlist{
 
 
 	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="ID:_USER")
+	@JoinColumn(name="ID_USER")
 	private User creator;
 
 	//N:M suscribers
 	@JoinTable(
-			name="rel_playlist_user",
-			joinColumns = @JoinColumn(name="FK_Playlist",nullable=false),
-			inverseJoinColumns = @JoinColumn(name="FK_User",nullable=false)
+			name="SUBSCRIPTION",
+			joinColumns = @JoinColumn(name="id_Playlist",nullable=false),
+			inverseJoinColumns = @JoinColumn(name="id_User",nullable=false)
 			)
 	@ManyToMany(cascade=CascadeType.ALL)
 	private List<User> subscribers=new ArrayList<User>();
@@ -54,8 +55,8 @@ public class Playlist{
 	//N:M songs
 	@JoinTable(
 			name="rel_playlist_song",
-			joinColumns = @JoinColumn(name="FK_Playlist",nullable=false),
-			inverseJoinColumns = @JoinColumn(name="Fk_Song",nullable=false)
+			joinColumns = @JoinColumn(name="id_Playlist",nullable=false),
+			inverseJoinColumns = @JoinColumn(name="id_Song",nullable=false)
 			)
 	@ManyToMany(cascade=CascadeType.ALL)
 	private List<Song> songs=new ArrayList<Song>();

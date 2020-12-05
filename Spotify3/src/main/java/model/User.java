@@ -1,15 +1,49 @@
 package model;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
-public class User {
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+@Entity
+@Table(name="USER")
+public class User implements Serializable{
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
+	@Id
+	@Column(name="ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	@Column(name="MAIL")
 	private String mail;
+	@Column(name="NAME")
 	private String name;
+	@Column(name="PHOTO")
 	private String photo;
+	@Column(name="ACTIVE")
 	private boolean active=false;
-	private Set<Playlist> subscriptions=new HashSet<Playlist>();
+
+	@JoinTable(
+			name="SUBSCRIPTION",
+				inverseJoinColumns = @JoinColumn(name="id_Playlist",nullable=false),
+			    joinColumns = @JoinColumn(name="id_User",nullable=false)
+			)
+	@ManyToMany(cascade=CascadeType.ALL)
+	private List<Playlist> subscriptions=new ArrayList<Playlist>();
 
 	public User(){
 		this(-1,"","","",true);
@@ -60,14 +94,14 @@ public class User {
 		this.photo = photo;
 	}
 
-	public Set<Playlist> getSubscriptions(){
 
+
+	public List<Playlist> getSubscriptions() {
 		return subscriptions;
 	}
 
-	public void setSubscriptions(Set<Playlist> subscriptions){
-
-		this.subscriptions=subscriptions;
+	public void setSubscriptions(List<Playlist> subscriptions) {
+		this.subscriptions = subscriptions;
 	}
 
 	public boolean isActive() {

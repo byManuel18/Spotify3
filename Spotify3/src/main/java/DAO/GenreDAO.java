@@ -1,15 +1,17 @@
 package DAO;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
 
+import java.util.Set;
 import enums.SentenciasGenre;
 import model.Genre;
+import utilities.ConnectionManager;
 
 public class GenreDAO extends Genre{
+
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Default constructor
@@ -43,7 +45,8 @@ public class GenreDAO extends Genre{
 	 * @param g(Genre)
 	 */
 	public GenreDAO(Genre g){
-
+		this.setId(g.getId());
+		this.setName(g.getName());
 	}
 
 	/**
@@ -51,7 +54,15 @@ public class GenreDAO extends Genre{
 	 * @param id(int): genre int
 	 */
 	public GenreDAO(int id){
-
+		Genre g=null;
+		ConnectionManager.getManager().getTransaction().begin();
+		g=ConnectionManager.getManager().find(Genre.class, id);
+		ConnectionManager.getManager().getTransaction().commit();
+		ConnectionManager.CloseEntityManager();
+		if(g!=null){
+			this.setId(id);
+			this.setName(g.getName());
+		}
 
 	}
 
@@ -61,7 +72,13 @@ public class GenreDAO extends Genre{
 	 * @return int: 1 if has been updated or inserted, 0 if didn't work, -1 if error
 	 */
 	public int update(){
-		return 0;
+		int result=-1;
+		ConnectionManager.getManager().getTransaction().begin();
+			ConnectionManager.getManager().persist(this);
+			result=1;
+		ConnectionManager.getManager().getTransaction().commit();
+
+		return result;
 	}
 
 	/**
@@ -69,34 +86,13 @@ public class GenreDAO extends Genre{
 	 * @return int: 1 if the genre has been deleted, 0 if didn't work, -1 if error
 	 */
 	public int delete(){
+		int result=0;
+		ConnectionManager.getManager().getTransaction().begin();
+		ConnectionManager.getManager().remove(this);
+		result=1;
+		ConnectionManager.getManager().getTransaction().commit();
 		return 0;
 	}
 
-	/**
-	 * Search all genre
-	 * @return Set<Genre>: all genres
-	 */
-	public static Set<Genre> SelectALL(){
-		return null;
-	}
 
-	/**
-	 * Search genres depending the statement and the parameter
-	 * @param sql(SentenciasGenre): statement by want to search (name)
-	 * @param id(int): genre id
-	 * @param argument(String): genre name
-	 * @return
-	 */
-	private static Set<Genre> Search(SentenciasGenre sql,int id,String argument){
-		return null;
-	}
-
-	/**
-	 * Check if a genre already exists on the database
-	 * @param name(String): genre name
-	 * @return true if exist
-	 */
-	public static boolean Exist(String  name){
-		return true;
-	}
 }
