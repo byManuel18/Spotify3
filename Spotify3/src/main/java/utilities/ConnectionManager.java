@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import enums.TypeBDD;
 import model.Options;
 
 public class ConnectionManager {
@@ -14,14 +15,28 @@ public class ConnectionManager {
 	public static EntityManager getManager(){
 		if(manager==null){
 			getConection();
-			manager=emf.createEntityManager();
+			try{
+				manager=emf.createEntityManager();
+			}catch (Exception e) {
+				// TODO: handle exception
+			}
+
 		}
 		return manager;
 	}
 
-	private static  void getConection(){
+	public static  void getConection(){
 		if(emf==null){
-			emf=Persistence.createEntityManagerFactory(o.getTypeBDD().toString());
+			try{
+				emf=Persistence.createEntityManagerFactory(o.getTypeBDD().toString());
+			}catch (Exception e) {
+				if(o.getTypeBDD()==TypeBDD.H2){
+					emf=Persistence.createEntityManagerFactory(TypeBDD.MySQL.toString());
+				}else if(o.getTypeBDD()==TypeBDD.MySQL){
+					emf=Persistence.createEntityManagerFactory(TypeBDD.H2.toString());
+				}
+			}
+
 		}
 
 	}
