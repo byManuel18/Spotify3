@@ -80,24 +80,6 @@ public class UsersDAO extends User{
 		return 0;
 	}
 
-	/**
-	 * Show subscribers from a playlist
-	 * @param idlista(int): playlist id
-	 * @return Set<User>: subscribers from the playlist
-	 */
-	public static Set<User> SelectSubscribers(int idlista){
-		return null;
-	}
 
-	/**
-	 * Search users depending the statement and parameters
-	 * @param sql(SentenciasUsers): statement by want to search
-	 * @param n(int): playlist id
-	 * @param argument(String): parameters
-	 * @return Set<User>: users selected based on the statement
-	 */
-	private static Set<User> Search(SentenciasUsers sql,int n,String argument){
-		return null;
-	}
 
 }

@@ -75,29 +75,5 @@ public class DiscDAO extends Disc{
 		return 0;
 	}
 
-	/**
-	 * Search discs by name
-	 * @param name(String): disc name
-	 * @return Set<Disc>: discs selected by name
-	 */
-	public static Set<Disc> SearchByName(String name){
-		return null;
-	}
 
-	/**
-	 * Search discs depending the statement and parameters
-	 * @param sent(SentenciasDisc): statement by want to search (Author or name)
-	 * @param id(int): disc id
-	 * @param artista(Artista): disc author
-	 * @param argumentos(String): disc name
-	 * @param date(LocalDate): disc date release
-	 * @return Set<Disc>: discs selected based on the statement
-	 */
-	private static Set<Disc> Search(SentenciasDisc sent, int id, Artist artista, String argumentos, LocalDate date){
-		return null;
-	}
-
-	public static boolean ExistDisc(String n, int id_artist){
-		return true;
-	}
 }

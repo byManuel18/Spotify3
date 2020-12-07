@@ -1,8 +1,7 @@
 package DAO;
 
 
-import java.util.Set;
-import enums.SentenciasGenre;
+
 import model.Genre;
 import utilities.ConnectionManager;
 
@@ -56,7 +55,12 @@ public class GenreDAO extends Genre{
 	public GenreDAO(int id){
 		Genre g=null;
 		ConnectionManager.getManager().getTransaction().begin();
-		g=ConnectionManager.getManager().find(Genre.class, id);
+		try{
+			g=ConnectionManager.getManager().find(Genre.class, id);
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+
 		ConnectionManager.getManager().getTransaction().commit();
 		ConnectionManager.CloseEntityManager();
 		if(g!=null){
@@ -75,10 +79,28 @@ public class GenreDAO extends Genre{
 		int result=-1;
 		Genre n=new Genre(this.getId(), this.getName());
 		ConnectionManager.getManager().getTransaction().begin();
-		ConnectionManager.getManager().persist(n);
-		result=1;
-		ConnectionManager.getManager().getTransaction().commit();
+		if(n.getId()>0){
+			try{
+				ConnectionManager.getManager().merge(n);
+				result=1;
+			}catch (Exception e) {
 
+			}
+
+		}else{
+			try{
+				ConnectionManager.getManager().persist(n);
+				ConnectionManager.getManager().flush();
+				this.setId(n.getId());
+				result=1;
+			}catch (Exception e) {
+				// TODO: handle exception
+			}
+
+		}
+
+		ConnectionManager.getManager().getTransaction().commit();
+		ConnectionManager.CloseEntityManager();
 		return result;
 	}
 
@@ -87,12 +109,21 @@ public class GenreDAO extends Genre{
 	 * @return int: 1 if the genre has been deleted, 0 if didn't work, -1 if error
 	 */
 	public int delete(){
-		int result=0;
-		Genre n=new Genre(this.getId(), this.getName());;
-		ConnectionManager.getManager().getTransaction().begin();
-		ConnectionManager.getManager().remove(n);
-		result=1;
-		ConnectionManager.getManager().getTransaction().commit();
+		int result=-1;
+		Genre n=new Genre(this.getId(), this.getName());
+		if(n.getId()>0){
+			ConnectionManager.getManager().getTransaction().begin();
+			try{
+				ConnectionManager.getManager().remove(ConnectionManager.getManager().contains(n) ? n : ConnectionManager.getManager().merge(n));
+				result=1;
+			}catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+
+			ConnectionManager.getManager().getTransaction().commit();
+			ConnectionManager.CloseEntityManager();
+		}
+
 		return result;
 	}
 

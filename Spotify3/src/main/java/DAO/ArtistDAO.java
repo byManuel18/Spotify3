@@ -71,44 +71,6 @@ public class ArtistDAO extends Artist {
 		return 0;
 	}
 
-	/**
-	 * Search artists by name
-	 * @param name(String): Artist name
-	 * @return Set<Artist>: artist selected by name
-	 */
-	public  static Set<Artist> SelectbyName(String name){
-		return null;
-	}
 
-	/**
-	 * Search artists by nationality
-	 * @param name(String): Artist nationality
-	 * @return Set<Artist>: artist selected by nationality
-	 */
-	public  static Set<Artist> SelectbyNacionalidad(String name){
-		return null;
-	}
-
-	/**
-	 * Search all artists
-	 * @return Set<Artist>: all artists
-	 */
-	public  static Set<Artist> SelectAll(){
-		return null;
-	}
-
-	/**
-	 * Search artists depending the statement and the parameter
-	 * @param sql(SentenciasArtista): statement by want to search (name or nationality)
-	 * @param parametro(String): parameter by want to search
-	 * @return Set<Artist>: artists selected based on the statement
-	 */
-	private static Set<Artist> Search(SentenciasArtista sql,String parametro){
-		return null;
-	}
-
-	public static boolean existArtist(String s){
-		return true;
-	}
 
 }

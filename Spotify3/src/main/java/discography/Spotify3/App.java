@@ -48,7 +48,7 @@ public class App{
 
 
 
-    	List<Artist> autores= ConnectionManager.getManager().createQuery("FROM Artist").getResultList();
+    	/*List<Artist> autores= ConnectionManager.getManager().createQuery("FROM Artist").getResultList();
     	for(Artist a: autores){
     		System.out.println(a);
     		for(Disc d:a.getDisclist()){
@@ -58,8 +58,18 @@ public class App{
     			}
     		}
 
+    	}*/
+    	//GenreDAO g=new GenreDAO("Oleee");
+    	//System.out.println(g.update());
+    	for(Genre g:GenreDAOImpl.SelectALL()){
+    		System.out.println(g);
     	}
-    	ConnectionManager.CloseAllConection();
+
+    	GenreDAO g=new GenreDAO("Prubas");
+    	System.out.println(g.update());
+    	System.out.println(g);
+
+    	ConnectionManager.CloseAllConection(); //NO BORRAR ESTA LÏNEA NUNCA; DEJADLA AL FINAL DE TODO
 
 
     }

@@ -25,10 +25,15 @@ public class GenreDAOImpl extends GenreDAO{
 	 */
 	public static boolean Exist(String  name){
 		boolean result=false;
+		Genre g=null;
 		ConnectionManager.getManager().getTransaction().begin();
-		Query query = ConnectionManager.getManager().createNamedQuery("Genre_exist",Genre.class);
-		query.setParameter("name",name);
-		Genre g=(Genre)query.getSingleResult();
+		try{
+			Query query = ConnectionManager.getManager().createNamedQuery("Genre_exist",Genre.class);
+			query.setParameter("name",name);
+			g=(Genre)query.getSingleResult();
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
 		ConnectionManager.getManager().getTransaction().commit();
 		ConnectionManager.CloseEntityManager();
 		if(g!=null){
@@ -56,10 +61,15 @@ public class GenreDAOImpl extends GenreDAO{
 		Query query=null;
 		List<Genre> listgs=new ArrayList<Genre>();
 		ConnectionManager.getManager().getTransaction().begin();
-		if(sql==SentenciasGenre.SELECTALL){
-			query = ConnectionManager.getManager().createNamedQuery("Genre_findAll",Genre.class);
+		try{
+			if(sql==SentenciasGenre.SELECTALL){
+				query = ConnectionManager.getManager().createNamedQuery("Genre_findAll",Genre.class);
+			}
+			listgs.addAll((List<Genre>)query.getResultList());
+		}catch (Exception e) {
+			// TODO: handle exception
 		}
-		listgs.addAll((List<Genre>)query.getResultList());
+
 		ConnectionManager.getManager().getTransaction().commit();
 		ConnectionManager.CloseEntityManager();
 
