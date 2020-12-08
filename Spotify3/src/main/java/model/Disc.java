@@ -28,13 +28,13 @@ import javax.persistence.Table;
 	@NamedQuery(name="Disc_findAll",
 	query="SELECT d FROM Disc d"),
 	@NamedQuery(name="Disc_exist",
-	query="FROM disco WHERE Id_Artist= :artist AND name= :name"),
+	query="FROM Disc WHERE Id_Artist= :artist AND name= :name"),
 	@NamedQuery(name="Disc_findId",
 	query="FROM Disc WHERE id= :id"),
 	@NamedQuery(name="Disc_findAuthor",
-	query="FROM disco WHERE Id_Artist= :artist"),
+	query="FROM Disc WHERE Id_Artist= :artist"),
 	@NamedQuery(name="Disc_findName",
-	query="FROM disco WHERE name LIKE :name"),
+	query="FROM Disc WHERE name LIKE :name"),
 
 })
 public class Disc implements Serializable {

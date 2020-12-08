@@ -88,10 +88,9 @@ public class PlayListDAO extends Playlist{
 	 */
 	public int update(){
 		int result=-1;
-		Playlist pl = new Playlist(this.getName(), this.getDescription(), this.getCreator());
+		Playlist pl = new Playlist(this.getId(),this.getName(), this.getDescription(), this.getCreator());
 		pl.setSongs(this.getSongs());
 		pl.setSubscribers(this.getSubscribers());
-		pl.setId(this.getId());
 		ConnectionManager.getManager().getTransaction().begin();
 		if(pl.getId()>0){
 			try{
@@ -122,7 +121,9 @@ public class PlayListDAO extends Playlist{
 	 */
 	public int delete(){
 		int result=-1;
-		Playlist pl = new Playlist(this.getName(), this.getDescription(), this.getCreator());
+		Playlist pl = new Playlist(this.getId(),this.getName(), this.getDescription(), this.getCreator());
+		pl.setSongs(this.getSongs());
+		pl.setSubscribers(this.getSubscribers());
 		if(pl.getId()>0){
 			ConnectionManager.getManager().getTransaction().begin();
 			try{

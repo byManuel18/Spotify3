@@ -3,6 +3,8 @@ package discography.Spotify3;
 import DAO.GenreDAO;
 import DAOImpl.GenreDAOImpl;
 import model.Genre;
+import model.Playlist;
+import model.User;
 import utilities.ConnectionManager;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -45,14 +47,39 @@ public class tests {
     	}*/
     	//GenreDAO g=new GenreDAO("Oleee");
     	//System.out.println(g.update());
-    	for(Genre g:GenreDAOImpl.SelectALL()){
+    	/*for(Genre g:GenreDAOImpl.SelectALL()){
     		System.out.println(g);
     	}
 
     	GenreDAO g=new GenreDAO("Prubas");
     	System.out.println(g.update());
-    	System.out.println(g);
+    	System.out.println(g);*/
 
+
+		ConnectionManager.getManager().getTransaction().begin();
+		//User s=ConnectionManager.getManager().find(User.class, 2);
+		User ss=ConnectionManager.getManager().find(User.class, 1);
+		//s.getPlaylistCreates().add(new Playlist("Prueba segunda", "lista de alvaro", s));
+		/*List<User> ul=ConnectionManager.getManager().createQuery("FROM User").getResultList();
+		for(User u:ul){
+			System.out.println(u);
+		}
+
+		for(Playlist p:s.getPlaylistCreates()){
+			System.out.println(p+ "    "+p.getCreator());
+		}*/
+		/*List<Playlist> sub=new ArrayList<Playlist>();
+		sub.add(s.getPlaylistCreates().get(0));
+		ss.setSubscriptions(sub);*/
+
+		for(Playlist pl:ss.getSubscriptions()){
+			System.out.println(pl+ "     "+pl.getCreator());
+			for(User u: pl.getSubscribers()){
+				System.out.println(u);
+			}
+		}
+
+		ConnectionManager.getManager().getTransaction().commit();
     	ConnectionManager.CloseAllConection(); //NO BORRAR ESTA LÏNEA NUNCA; DEJADLA AL FINAL DE TODO
 
 	}
