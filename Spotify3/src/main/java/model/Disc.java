@@ -16,12 +16,27 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="Disc")
+@NamedQueries({
+	@NamedQuery(name="Disc_findAll",
+	query="SELECT d FROM Disc d"),
+	@NamedQuery(name="Disc_exist",
+	query="FROM disco WHERE id_artista=artist AND nombre=name"),
+	@NamedQuery(name="Disc_findId",
+	query="FROM Disc WHERE id= :id"),
+	@NamedQuery(name="Disc_findAuthor",
+	query="FROM disco WHERE id_artista=artist"),
+	//@NamedQuery(name="Disc_findName",
+	//query="SELECT * FROM disco WHERE nombre LIKE ?"),
+
+})
 public class Disc implements Serializable {
 
 	private static final long serialVersionUID = 1L;
