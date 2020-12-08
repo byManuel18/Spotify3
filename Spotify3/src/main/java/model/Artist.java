@@ -30,8 +30,8 @@ import javax.persistence.Table;
 				query="FROM Artist WHERE name LIKE :name"),
 	@NamedQuery(name="Artist_byNationality",
 				query="FROM Artist WHERE nationality= :nationality"),
-	@NamedQuery(name="Artist_byId",
-				query="FROM Artist WHERE id= :id")
+	/*@NamedQuery(name="Artist_byId",
+				query="FROM Artist WHERE id= :id")*/
 
 })
 public class Artist implements Serializable{

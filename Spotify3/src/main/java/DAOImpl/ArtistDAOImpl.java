@@ -66,10 +66,12 @@ public class ArtistDAOImpl extends ArtistDAO{
 			}
 			if(sql==SentenciasArtista.SELECTBYNACIONALIDAD){
 				query = ConnectionManager.getManager().createNamedQuery("Artist_byNationality",Artist.class);
+				query.setParameter("nationality", parametro);
 			}
-			if(sql==SentenciasArtista.SELECTBYID){
+			/*if(sql==SentenciasArtista.SELECTBYID){
 				query = ConnectionManager.getManager().createNamedQuery("Artist_byId", Artist.class);
-				}
+				query.setParameter("id", parametro);
+				}*/
 			lista.addAll((List<Artist>)query.getResultList());
 		}catch (Exception e) {
 			// TODO: handle exception
