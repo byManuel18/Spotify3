@@ -21,14 +21,14 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import javassist.expr.NewArray;
 
 @Entity
 @Table(name="Playlist")
 @NamedQueries({
 	@NamedQuery(name="Playlist_findAll", query="SELECT pl FROM Playlist pl"),
 	@NamedQuery(name="Playlist_findById", query="FROM Playlist WHERE ID= :id"),
-	@NamedQuery(name="Playlist_findForCreator", query="FROM Playlist WHERE ID_USER= :creator")
+	@NamedQuery(name="Playlist_findForCreator", query="FROM Playlist WHERE ID_USER= :creator"),
+	@NamedQuery(name="Playlist_findForName", query="FROM Playlist WHERE ID_USER=:creator AND name=:name")
 })
 public class Playlist implements Serializable{
 
@@ -60,12 +60,12 @@ public class Playlist implements Serializable{
 	private List<User> subscribers=new ArrayList<User>();
 
 	//N:M songs
-	@JoinTable(
+	/*@JoinTable(
 			name="rel_playlist_song",
 			joinColumns = @JoinColumn(name="id_Playlist",nullable=false),
 			inverseJoinColumns = @JoinColumn(name="id_Song",nullable=false)
-			)
-	@ManyToMany(cascade=CascadeType.ALL)
+			)*/
+	@ManyToMany(cascade=CascadeType.ALL,mappedBy="playlists")
 	private List<Song> songs=new ArrayList<Song>();
 
 	public Playlist(){

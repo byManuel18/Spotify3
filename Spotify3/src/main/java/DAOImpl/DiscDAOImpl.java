@@ -20,17 +20,8 @@ public class DiscDAOImpl extends DiscDAO{
 	 * @return List<Disc>: discs selected by name
 	 */
 	public static List<Disc> SearchByName(String name){
-		Query query= null;
-		List<Disc> listds=new ArrayList<Disc>();
-		ConnectionManager.getManager().getTransaction().begin();
-		try{
 
-		}catch(Exception e){
-			//TODO handle exception
-		}
-		ConnectionManager.getManager().getTransaction().commit();
-		ConnectionManager.CloseEntityManager();
-		return null;
+		return Search(SentenciasDisc.SELECTBYNAME, -1, null, name, null);
 	}
 
 	/**
@@ -51,6 +42,9 @@ public class DiscDAOImpl extends DiscDAO{
 				query = ConnectionManager.getManager().createNamedQuery("Disc_findAll",Disc.class);
 			}else if(sent==SentenciasDisc.SELECTBYID){
 				query= ConnectionManager.getManager().createNamedQuery("Disc_findId",Disc.class);
+			}else if(sent==SentenciasDisc.SELECTBYNAME){
+				query= ConnectionManager.getManager().createNamedQuery("Disc_findId",Disc.class);
+				query.setParameter("name", argumentos);
 			}
 			listds.addAll((List<Disc>)query.getResultList());
 		}catch (Exception e) {
