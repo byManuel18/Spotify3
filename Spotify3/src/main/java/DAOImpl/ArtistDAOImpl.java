@@ -1,9 +1,14 @@
 package DAOImpl;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.Query;
+
 import DAO.ArtistDAO;
 import enums.SentenciasArtista;
 import model.Artist;
+import utilities.ConnectionManager;
 
 public class ArtistDAOImpl extends ArtistDAO{
 
@@ -13,16 +18,24 @@ public class ArtistDAOImpl extends ArtistDAO{
 	 * @return List<Artist>: artist selected by name
 	 */
 	public  static List<Artist> SelectbyName(String name){
-		return null;
+		return Search(SentenciasArtista.SELECTBYNAME, -1, "");
+	}
+	/**
+	 * Search artists by id
+	 * @param id(int): Artist id
+	 * @return List<Artist>: artist selected by id
+	 */
+	public  static List<Artist> SelectbyId(int id){
+		return Search(SentenciasArtista.SELECTBYID, id, "");
 	}
 
 	/**
 	 * Search artists by nationality
-	 * @param name(String): Artist nationality
+	 * @param nationality(String): Artist nationality
 	 * @return List<Artist>: artist selected by nationality
 	 */
-	public  static List<Artist> SelectbyNacionalidad(String name){
-		return null;
+	public  static List<Artist> SelectbyNacionalidad(String nationality){
+		return Search(SentenciasArtista.SELECTBYNACIONALIDAD, -1, "");
 	}
 
 	/**
@@ -30,7 +43,7 @@ public class ArtistDAOImpl extends ArtistDAO{
 	 * @return List<Artist>: all artists
 	 */
 	public  static List<Artist> SelectAll(){
-		return null;
+		return Search(SentenciasArtista.SELECTALL, -1, "");
 	}
 
 	/**
@@ -39,12 +52,51 @@ public class ArtistDAOImpl extends ArtistDAO{
 	 * @param parametro(String): parameter by want to search
 	 * @return List<Artist>: artists selected based on the statement
 	 */
-	private static List<Artist> Search(SentenciasArtista sql,String parametro){
-		return null;
+	private static List<Artist> Search(SentenciasArtista sql,int id, String parametro){
+		Query query=null;
+		List<Artist> lista=new ArrayList<Artist>();
+		ConnectionManager.getManager().getTransaction().begin();
+		try{
+			if(sql==SentenciasArtista.SELECTALL){
+				query = ConnectionManager.getManager().createNamedQuery("Artist_findAll",Artist.class);
+			}
+			if(sql==SentenciasArtista.SELECTBYNAME){
+				query = ConnectionManager.getManager().createNamedQuery("Artist_byName",Artist.class);
+			}
+			if(sql==SentenciasArtista.SELECTBYNACIONALIDAD){
+				query = ConnectionManager.getManager().createNamedQuery("Artist_byNationality",Artist.class);
+			}
+			if(sql==SentenciasArtista.SELECTBYID){
+				query = ConnectionManager.getManager().createNamedQuery("Artist_byId", Artist.class);
+				}
+			lista.addAll((List<Artist>)query.getResultList());
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		ConnectionManager.getManager().getTransaction().commit();
+		ConnectionManager.CloseEntityManager();
+
+		return lista;
 	}
 
-	public static boolean existArtist(String s){
-		return true;
+	public static boolean existArtist(String name){
+		boolean result=false;
+		Artist a=null;
+		ConnectionManager.getManager().getTransaction().begin();
+		try{
+			Query query = ConnectionManager.getManager().createNamedQuery("Artist_exist",Artist.class);
+			query.setParameter("name",name);
+			a=(Artist)query.getSingleResult();
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		ConnectionManager.getManager().getTransaction().commit();
+		ConnectionManager.CloseEntityManager();
+		if(a!=null){
+			result=true;
+		}
+		return result;
 	}
 
 }

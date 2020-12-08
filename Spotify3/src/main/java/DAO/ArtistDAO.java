@@ -4,8 +4,12 @@ import java.util.Set;
 
 import enums.SentenciasArtista;
 import model.Artist;
+import model.Genre;
+import utilities.ConnectionManager;
 
 public class ArtistDAO extends Artist {
+	
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Default constructor
@@ -43,6 +47,11 @@ public class ArtistDAO extends Artist {
 	 * @param a(Artist)
 	 */
 	public ArtistDAO(Artist a){
+		this.setId(a.getId());
+		this.setName(a.getName());
+		this.setNationality(a.getNationality());
+		this.setPhoto(a.getPhoto());
+		this.setDisclist(a.getDisclist());
 
 	}
 
@@ -51,6 +60,23 @@ public class ArtistDAO extends Artist {
 	 * @param id(int): Artist id
 	 */
 	public ArtistDAO(int id){
+		Artist a=null;
+		ConnectionManager.getManager().getTransaction().begin();
+		try{
+			a=ConnectionManager.getManager().find(Artist.class, id);
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		ConnectionManager.getManager().getTransaction().commit();
+		ConnectionManager.CloseEntityManager();
+		if(a!=null){
+			this.setId(id);
+			this.setName(a.getName());
+			this.setNationality(a.getNationality());
+			this.setPhoto(a.getPhoto());
+			this.setDisclist(a.getDisclist());
+		}
 
 	}
 
@@ -60,7 +86,31 @@ public class ArtistDAO extends Artist {
 	 * @return int: 1 if has been updated or inserted, 0 if didn't work, -1 if error
 	 */
 	public int update(){
-		return 0;
+		int result=-1;
+		Artist a=new Artist(this.getId(),this.getName(),this.getNationality(),this.getPhoto());
+		a.setDisclist(this.getDisclist());
+		ConnectionManager.getManager().getTransaction().begin();
+		if(a.getId()>0){
+			try{
+				ConnectionManager.getManager().merge(a);
+				result=1;
+			}catch (Exception e){
+
+			}
+		}else{
+			try{
+				ConnectionManager.getManager().persist(a);
+				ConnectionManager.getManager().flush();
+				this.setId(a.getId());
+				result=1;
+			}catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+
+		ConnectionManager.getManager().getTransaction().commit();
+		ConnectionManager.CloseEntityManager();
+		return result;
 	}
 
 	/**
@@ -68,7 +118,22 @@ public class ArtistDAO extends Artist {
 	 * @return int: 1 if the artist has been deleted, 0 if didn't work, -1 if error
 	 */
 	public int delete(){
-		return 0;
+		int result =-1;
+		Artist a=new Artist(this.getId(),this.getName(),this.getNationality(),this.getPhoto());
+		a.setDisclist(this.getDisclist());
+		if(a.getId()>0){
+			ConnectionManager.getManager().getTransaction().begin();
+			try{
+				ConnectionManager.getManager().remove(ConnectionManager.getManager().contains(a) ? a : ConnectionManager.getManager().merge(a));
+				result=1;
+			}catch (Exception e) {
+				// TODO: handle exception
+			}
+			ConnectionManager.getManager().getTransaction().commit();
+			ConnectionManager.CloseEntityManager();
+		}
+
+		return result;
 	}
 
 

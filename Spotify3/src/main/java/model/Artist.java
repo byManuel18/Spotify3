@@ -14,11 +14,26 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="ARTIST")
+@NamedQueries({
+	@NamedQuery(name="Artist_findAll",
+	            query="SELECT a FROM Artist a"),
+	@NamedQuery(name="Artist_exist",
+				query="FROM Artist WHERE name= :name"),
+	@NamedQuery(name="Artist_byName",
+				query="FROM Artist WHERE name= :name"),
+	@NamedQuery(name="Artist_byNationality",
+				query="FROM Artist WHERE nationality= :nationality"),
+	@NamedQuery(name="Artist_byId",
+				query="FROM Artist WHERE id= :id")
+
+})
 public class Artist implements Serializable{
 
 	private static final long serialVersionUID = 1L;
