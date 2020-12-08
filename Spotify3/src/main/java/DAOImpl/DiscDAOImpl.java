@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.Query;
 
 import DAO.DiscDAO;
+import enums.SentenciasArtista;
 import enums.SentenciasDisc;
 import model.Artist;
 import model.Disc;
@@ -43,8 +44,8 @@ public class DiscDAOImpl extends DiscDAO{
 			}else if(sent==SentenciasDisc.SELECTBYID){
 				query= ConnectionManager.getManager().createNamedQuery("Disc_findId",Disc.class);
 			}else if(sent==SentenciasDisc.SELECTBYNAME){
-				query= ConnectionManager.getManager().createNamedQuery("Disc_findId",Disc.class);
-				query.setParameter("name", argumentos);
+				query = ConnectionManager.getManager().createNamedQuery("Artist_byName",Artist.class);
+				query.setParameter("name", argumentos+"%");
 			}
 			listds.addAll((List<Disc>)query.getResultList());
 		}catch (Exception e) {

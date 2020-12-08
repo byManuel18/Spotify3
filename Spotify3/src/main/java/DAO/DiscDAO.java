@@ -84,9 +84,8 @@ public class DiscDAO extends Disc{
 	 */
 	public int update(){
 		int result=-1;
-		Disc d = new Disc(this.getName(), this.getArtist(), this.getPhoto(), this.getDate());
+		Disc d = new Disc(this.getId(), this.getName(), this.getArtist(), this.getPhoto(), this.getDate());
 		d.setSonglist(this.getSonglist());
-		d.setId(this.getId());
 		ConnectionManager.getManager().getTransaction().begin();
 		if(d.getId()>0){
 			try{
