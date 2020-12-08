@@ -53,6 +53,8 @@ public class PlayListDAO extends Playlist{
 		this.setName(pl.getName());
 		this.setDescription(pl.getDescription());
 		this.setCreator(pl.getCreator());
+		this.setSongs(pl.getSongs());
+		this.setSubscribers(pl.getSubscribers());
 		}
 
 	/**
@@ -67,6 +69,16 @@ public class PlayListDAO extends Playlist{
 		}catch (Exception e){
 
 		}
+		ConnectionManager.getManager().getTransaction().commit();
+		ConnectionManager.CloseEntityManager();
+		if(pl!=null){
+			this.setCreator(pl.getCreator());
+			this.setDescription(pl.getDescription());
+			this.setId(pl.getId());
+			this.setName(pl.getName());
+			this.setSongs(pl.getSongs());
+			this.setSubscribers(pl.getSubscribers());
+		}
 	}
 
 	/**
@@ -77,6 +89,9 @@ public class PlayListDAO extends Playlist{
 	public int update(){
 		int result=-1;
 		Playlist pl = new Playlist(this.getName(), this.getDescription(), this.getCreator());
+		pl.setSongs(this.getSongs());
+		pl.setSubscribers(this.getSubscribers());
+		pl.setId(this.getId());
 		ConnectionManager.getManager().getTransaction().begin();
 		if(pl.getId()>0){
 			try{
@@ -112,9 +127,9 @@ public class PlayListDAO extends Playlist{
 			ConnectionManager.getManager().getTransaction().begin();
 			try{
 				ConnectionManager.getManager().remove(ConnectionManager.getManager().contains(pl) ? pl : ConnectionManager.getManager().merge(pl));
+				result=1;
 			}catch (Exception e) {
 				// TODO: handle exception
-				System.out.println(e.getMessage());
 			}
 			ConnectionManager.getManager().getTransaction().commit();
 			ConnectionManager.CloseEntityManager();

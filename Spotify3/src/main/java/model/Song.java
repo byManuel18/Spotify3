@@ -54,14 +54,14 @@ public class Song implements Serializable{
 	@JoinColumn(name="ID_DISC")
 	private Disc disc;
 
-	/*//N:M playlist
+	//N:M playlist
 	@JoinTable(
 		name="rel_song_playlist",
 		joinColumns = @JoinColumn(name = "ID_SONG", nullable=false),
 		inverseJoinColumns = @JoinColumn(name="id_Playlist", nullable=false)
 			)
 	@ManyToMany(cascade= CascadeType.ALL,fetch=FetchType.LAZY)
-	private List<Playlist> playlists = new ArrayList<Playlist>();*/
+	private List<Playlist> playlists = new ArrayList<Playlist>();
 
 
 	public Song(){

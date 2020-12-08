@@ -7,6 +7,7 @@ import javax.persistence.Query;
 
 import DAO.PlayListDAO;
 import enums.SentenciasPlayList;
+import model.Genre;
 import model.Playlist;
 import utilities.ConnectionManager;
 
@@ -140,7 +141,23 @@ public class PlayListDAOImpl extends PlayListDAO{
 	}
 
 	public static boolean ExistSameName(int id, String n){
-		return true;
+		boolean result=false;
+		Playlist pl=null;
+		ConnectionManager.getManager().getTransaction().begin();
+		try{
+			Query query = ConnectionManager.getManager().createNamedQuery("Playlist_findForName",Playlist.class);
+			query.setParameter("creator",id);
+			query.setParameter("name",n);
+			pl=(Playlist)query.getSingleResult();
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		ConnectionManager.getManager().getTransaction().commit();
+		ConnectionManager.CloseEntityManager();
+		if(pl!=null){
+			result=true;
+		}
+		return result;
 	}
 
 }
