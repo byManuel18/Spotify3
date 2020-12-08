@@ -64,19 +64,22 @@ public class ArtistDAO extends Artist {
 		ConnectionManager.getManager().getTransaction().begin();
 		try{
 			a=ConnectionManager.getManager().find(Artist.class, id);
+
+			if(a!=null){
+				ConnectionManager.getManager().merge(a);
+				this.setId(id);
+				this.setName(a.getName());
+				this.setNationality(a.getNationality());
+				this.setPhoto(a.getPhoto());
+				this.setDisclist(a.getDisclist());
+			}
 		}catch (Exception e) {
 			// TODO: handle exception
 		}
 
 		ConnectionManager.getManager().getTransaction().commit();
 		ConnectionManager.CloseEntityManager();
-		if(a!=null){
-			this.setId(id);
-			this.setName(a.getName());
-			this.setNationality(a.getNationality());
-			this.setPhoto(a.getPhoto());
-			this.setDisclist(a.getDisclist());
-		}
+
 
 	}
 

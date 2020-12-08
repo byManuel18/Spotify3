@@ -35,7 +35,7 @@ public class Song implements Serializable{
 
 	@Id
 	@Column(name="ID")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 
 	@Column(name="NAME", nullable=false)
@@ -50,7 +50,7 @@ public class Song implements Serializable{
 	private Genre genre;
 
 	//1:M
-	@ManyToOne(fetch=FetchType.EAGER)
+	@ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
 	@JoinColumn(name="ID_DISC")
 	private Disc disc;
 

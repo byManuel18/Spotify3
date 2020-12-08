@@ -28,7 +28,12 @@ import javax.persistence.Table;
 	@NamedQuery(name="Playlist_findAll", query="SELECT pl FROM Playlist pl"),
 	@NamedQuery(name="Playlist_findById", query="FROM Playlist WHERE ID= :id"),
 	@NamedQuery(name="Playlist_findForCreator", query="FROM Playlist WHERE ID_USER= :creator"),
-	@NamedQuery(name="Playlist_findForName", query="FROM Playlist WHERE ID_USER=:creator AND name=:name")
+	@NamedQuery(name="Playlist_findForName", query="FROM Playlist WHERE ID_USER=:creator AND name=:name"),
+	@NamedQuery(name="Playlist_findEXceptUser", query="FROM Playlist WHERE ID_USER !=:id"),
+	@NamedQuery(name="Playlist_SLECTALLEXCEPTUSERANDNAME",query="FROM Playlist WHERE ID_USER !=:id AND name LIKE :name"),
+	//@NamedQuery(name="Playlist_SLECTALLEXCEPTUSERANDNAMEFROMCREATOR",query="SELECT l.name,l.id,l.description,l.ID_USER FROM Playlist"
+	//		+ " AS l JOIN User AS u ON l.ID_USER=u.id WHERE l.ID_USER!=:id AND u.name LIKE :name"),
+
 })
 public class Playlist implements Serializable{
 
@@ -36,7 +41,7 @@ public class Playlist implements Serializable{
 
 	@Id
 	@Column(name="ID")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 
 	@Column(name="NAME")

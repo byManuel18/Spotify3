@@ -45,7 +45,7 @@ public class PlayListDAOImpl extends PlayListDAO{
 	 * @return List<playlist>: playlists selected where user isn't the creator
 	 */
 	public static List<Playlist> SearchAllExceptUSer(int id){
-		return null;
+		return Search(SentenciasPlayList.SLECTALLEXCEPTUSER,"",id);
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class PlayListDAOImpl extends PlayListDAO{
 	 * @return List<Playlist>: playlists selected by name where user isn't the creator
 	 */
 	public static List<Playlist> SearchAllExceptUSerAndNameList(int id,String name){
-		return null;
+		return  Search(SentenciasPlayList.SLECTALLEXCEPTUSERANDNAME,name,id);
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class PlayListDAOImpl extends PlayListDAO{
 	 * @return List<Playlist>: playlists selected by creator where user isn't the creator
 	 */
 	public static List<Playlist> SearchAllExceptUSerAndNameCreator(int id,String name){
-		return null;
+		return  Search(SentenciasPlayList.SLECTALLEXCEPTUSERANDNAMEFROMCREATOR,name,id);
 	}
 
 
@@ -89,6 +89,17 @@ public class PlayListDAOImpl extends PlayListDAO{
 				query = ConnectionManager.getManager().createNamedQuery("Playlist_findForCreator", Playlist.class);
 			}else if(sql==SentenciasPlayList.SELECTFORUSERSUBSCRIBER){
 				query = ConnectionManager.getManager().createNamedQuery("Playlist_findForUser", Playlist.class);
+			}else if(sql==SentenciasPlayList.SLECTALLEXCEPTUSER){
+				query = ConnectionManager.getManager().createNamedQuery("Playlist_findEXceptUser", Playlist.class);
+				query.setParameter("id", id);
+			}else if(sql==SentenciasPlayList.SLECTALLEXCEPTUSERANDNAME){
+				query = ConnectionManager.getManager().createNamedQuery("Playlist_SLECTALLEXCEPTUSERANDNAME", Playlist.class);
+			query.setParameter("id", id);
+			query.setParameter("name", argument+"%");
+			}else if(sql==SentenciasPlayList.SLECTALLEXCEPTUSERANDNAMEFROMCREATOR){
+				query = ConnectionManager.getManager().createNamedQuery("Playlist_SLECTALLEXCEPTUSERANDNAMEFROMCREATOR", Playlist.class);
+				query.setParameter("id", id);
+				query.setParameter("name", argument+"%");
 			}
 			listpl.addAll((List<Playlist>)query.getResultList());
 		}catch (Exception e) {

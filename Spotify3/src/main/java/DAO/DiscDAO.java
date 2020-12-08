@@ -1,9 +1,12 @@
 package DAO;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import model.Artist;
 import model.Disc;
+import model.Song;
 import utilities.ConnectionManager;
 
 public class DiscDAO extends Disc{
@@ -46,6 +49,7 @@ public class DiscDAO extends Disc{
 	 * @param disc(Disc)
 	 */
 	public DiscDAO(Disc disc){
+		this.setId(disc.getId());
 		this.setName(disc.getName());
 		this.setArtist(disc.getArtist());
 		this.setPhoto(disc.getPhoto());
@@ -61,20 +65,26 @@ public class DiscDAO extends Disc{
 		Disc d= null;
 		ConnectionManager.getManager().getTransaction().begin();
 		try{
-			d=ConnectionManager.getManager().find(Disc.class, id);
-		}catch(Exception e){
+			d=ConnectionManager.getManager().find(Disc.class,id);
+			if(d!=null){
+				ConnectionManager.getManager().merge(d);
 
+
+
+			}
+		}catch(Exception e){
+			System.out.println(e.getMessage());
 		}
+
 		ConnectionManager.getManager().getTransaction().commit();
 		ConnectionManager.CloseEntityManager();
-		if(d!=null){
-			this.setId(id);
-			this.setArtist(d.getArtist());
-			this.setDate(d.getDate());
-			this.setName(d.getName());
-			this.setPhoto(d.getPhoto());
-			this.setSonglist(d.getSonglist());
-		}
+		this.setId(id);
+		this.setName(d.getName());
+		this.setDate(d.getDate());
+		this.setPhoto(d.getPhoto());
+		this.setSonglist(d.getSonglist());
+		this.setArtist(d.getArtist());
+
 	}
 
 	/**
@@ -116,14 +126,18 @@ public class DiscDAO extends Disc{
 	 */
 	public int delete(){
 		int result=-1;
-		Disc d = new Disc(this.getName(), this.getArtist(), this.getPhoto(), this.getDate());
+		Disc d = new Disc(this.getId(),this.getName(), this.getArtist(), this.getPhoto(), this.getDate());
+		d.setSonglist(this.getSonglist());
+
 		if(d.getId()>0){
+
 			ConnectionManager.getManager().getTransaction().begin();
 			try{
 				ConnectionManager.getManager().remove(ConnectionManager.getManager().contains(d) ? d : ConnectionManager.getManager().merge(d));
 				result=1;
+
 			}catch (Exception e) {
-				// TODO: handle exception
+
 			}
 			ConnectionManager.getManager().getTransaction().commit();
 			ConnectionManager.CloseEntityManager();

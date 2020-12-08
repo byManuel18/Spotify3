@@ -1,7 +1,12 @@
 package discography.Spotify3;
 
+import DAO.ArtistDAO;
+import DAO.DiscDAO;
 import DAO.GenreDAO;
+import DAOImpl.ArtistDAOImpl;
 import DAOImpl.GenreDAOImpl;
+import enums.TypeBDD;
+import model.Artist;
 import model.Genre;
 import model.Playlist;
 import model.User;
@@ -56,9 +61,9 @@ public class tests {
     	System.out.println(g);*/
 
 
-		ConnectionManager.getManager().getTransaction().begin();
+		//ConnectionManager.getManager().getTransaction().begin();
 		//User s=ConnectionManager.getManager().find(User.class, 2);
-		User ss=ConnectionManager.getManager().find(User.class, 1);
+		//User ss=ConnectionManager.getManager().find(User.class, 1);
 		//s.getPlaylistCreates().add(new Playlist("Prueba segunda", "lista de alvaro", s));
 		/*List<User> ul=ConnectionManager.getManager().createQuery("FROM User").getResultList();
 		for(User u:ul){
@@ -72,14 +77,22 @@ public class tests {
 		sub.add(s.getPlaylistCreates().get(0));
 		ss.setSubscriptions(sub);*/
 
-		for(Playlist pl:ss.getSubscriptions()){
+		/*for(Playlist pl:ss.getSubscriptions()){
 			System.out.println(pl+ "     "+pl.getCreator());
 			for(User u: pl.getSubscribers()){
 				System.out.println(u);
 			}
 		}
-
-		ConnectionManager.getManager().getTransaction().commit();
+		ConnectionManager.getManager().getTransaction().commit();*/
+		//ConnectionManager.getOpcion().setTypeBDD(TypeBDD.MySQL);
+		/*for(Artist a :ArtistDAOImpl.SelectbyName("He sido")){
+			System.out.println(a);
+		}*/
+	//	ConnectionManager.getManager().getTransaction().begin();
+		
+		//ArtistDAO n=new ArtistDAO(2);
+		//System.out.println(n);
+	//	ConnectionManager.getManager().getTransaction().commit();
     	ConnectionManager.CloseAllConection(); //NO BORRAR ESTA LÏNEA NUNCA; DEJADLA AL FINAL DE TODO
 
 	}

@@ -40,7 +40,7 @@ public class Artist implements Serializable{
 
 	@Id
 	@Column(name="ID")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 
 	@Column(name="NAME")
@@ -49,8 +49,8 @@ public class Artist implements Serializable{
 	private String nationality;
 	@Column(name="PHOTO")
 	private String photo;
-	@OneToMany(mappedBy = "artist",cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	private List<Disc> disclist=new ArrayList<Disc>();;
+	@OneToMany(mappedBy = "artist",cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	private List<Disc> disclist=new ArrayList<Disc>();
 
 	public Artist() {
 		this(-1, "", "", "");

@@ -15,10 +15,16 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 @Entity
 @Table(name="USER")
+@NamedQueries({
+	@NamedQuery(name="User_findbyname",
+	            query="FROM User WHERE MAIL= :name"),
+})
 public class User implements Serializable{
 	/**
 	 *
@@ -26,7 +32,7 @@ public class User implements Serializable{
 	private static final long serialVersionUID = 1L;
 	@Id
 	@Column(name="ID")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	@Column(name="MAIL")
 	private String mail;

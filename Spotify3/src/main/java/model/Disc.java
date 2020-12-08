@@ -48,7 +48,7 @@ public class Disc implements Serializable {
 	private String name;
 
 
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="Id_Artist")
 	private Artist artist;
 
@@ -59,8 +59,8 @@ public class Disc implements Serializable {
 	private LocalDate date;
 
 	//1:N
-	@OneToMany(mappedBy = "disc",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-	private List<Song> songlist;
+	@OneToMany(mappedBy = "disc",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	private List<Song> songlist= new ArrayList<Song>();
 
 
 	public Disc() {
@@ -73,13 +73,11 @@ public class Disc implements Serializable {
 
 
 	public Disc(int id, String name, Artist artist, String photo, LocalDate date) {
-		super();
 		this.id = id;
 		this.name = name;
 		this.artist = artist;
 		this.photo = photo;
 		this.date = date;
-		this.songlist = new ArrayList<Song>();
 	}
 
 	public int getId() {
@@ -138,28 +136,6 @@ public class Disc implements Serializable {
 		for(Song s:this.songlist){
 			s.setDisc(this);
 		}
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + id;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Disc other = (Disc) obj;
-		if (id != other.id)
-			return false;
-		return true;
 	}
 
 	@Override

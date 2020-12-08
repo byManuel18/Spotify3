@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="843.0" prefWidth="1261.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ArtistController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="843.0" prefWidth="1261.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ArtistController">
    <bottom>
       <Button mnemonicParsing="false" onAction="#Return" text="Volver" BorderPane.alignment="CENTER">
          <BorderPane.margin>
@@ -122,6 +122,7 @@
                                           <Button mnemonicParsing="false" onAction="#ClearArtist" text="Limpiar" />
                                           <Button fx:id="b_add" mnemonicParsing="false" onAction="#AddArtist" text="Añadir" />
                                           <Button fx:id="b_edit" mnemonicParsing="false" onAction="#EditArtist" text="Editar" />
+                                          <Button mnemonicParsing="false" onAction="#deleteArtist" text="Eliminar" />
                                        </children>
                                     </HBox>
                                  </children>
@@ -206,6 +207,7 @@
                                                 <Button fx:id="b_clear_disc" mnemonicParsing="false" onAction="#ClearDisc" text="Limpiar" />
                                                 <Button fx:id="b_add_disc" mnemonicParsing="false" onAction="#AddDisc" text="Añadir" />
                                                 <Button fx:id="b_edit_disc" mnemonicParsing="false" onAction="#EditDdisc" text="Editar" />
+                                                <Button mnemonicParsing="false" onAction="#deleteDisc" text="Eliminar" />
                                              </children>
                                           </HBox>
                                        </children>
@@ -267,6 +269,7 @@
                                           <Button fx:id="b_clear_song" mnemonicParsing="false" onAction="#ClearSong" text="Limpiar" />
                                           <Button fx:id="b_add_song" mnemonicParsing="false" onAction="#AddSong" text="Añadir" />
                                           <Button fx:id="b_edit_song" mnemonicParsing="false" onAction="#EditSong" text="Editar" />
+                                          <Button mnemonicParsing="false" onAction="#deleteSong" text="Eliminar" />
                                        </children>
                                     </VBox>
                                  </children>

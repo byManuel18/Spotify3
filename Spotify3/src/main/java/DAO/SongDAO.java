@@ -87,6 +87,7 @@ public class SongDAO extends Song{
 	public int update(){
 		int result=-1;
 		Song s= new Song(this.getId(), this.getName(), this.getDuration() ,this.getGenre(), this.getDisc());
+		System.out.println(s+"    "+s.getDisc());
 		ConnectionManager.getManager().getTransaction().begin();
 		if(s.getId()>0){
 			try{
@@ -102,7 +103,7 @@ public class SongDAO extends Song{
 				this.setId(s.getId());
 				result=1;
 			}catch (Exception e){
-
+				System.out.println(e.getMessage());
 			}
 		}
 

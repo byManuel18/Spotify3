@@ -2,8 +2,12 @@ package DAO;
 
 import java.util.Set;
 
+import javax.persistence.Query;
+
 import enums.SentenciasUsers;
+import model.Disc;
 import model.User;
+import utilities.ConnectionManager;
 
 public class UsersDAO extends User{
 
@@ -45,7 +49,13 @@ public class UsersDAO extends User{
 	 * @param u(User)
 	 */
 	public UsersDAO(User u){
-		//this.setSubscriptions(u.getSubscriptions());
+		this.setId(u.getId());
+		this.setActive(u.isActive());
+		this.setMail(u.getMail());
+		this.setName(u.getName());
+		this.setPhoto(u.getPhoto());
+		this.setPlaylistCreates(u.getPlaylistCreates());
+		this.setSubscriptions(u.getSubscriptions());
 	}
 
 	/**
@@ -53,6 +63,24 @@ public class UsersDAO extends User{
 	 * @param id(int): user id
 	 */
 	public UsersDAO(int id){
+		User u= null;
+		ConnectionManager.getManager().getTransaction().begin();
+		try{
+			u=ConnectionManager.getManager().find(User.class, id);
+		}catch(Exception e){
+
+		}
+		if(u!=null){
+			this.setId(id);
+			this.setActive(u.isActive());
+			this.setMail(u.getMail());
+			this.setName(u.getName());
+			this.setPhoto(u.getPhoto());
+			this.setPlaylistCreates(u.getPlaylistCreates());
+			this.setSubscriptions(u.getPlaylistCreates());
+		}
+		ConnectionManager.getManager().getTransaction().commit();
+		ConnectionManager.CloseEntityManager();
 	}
 
 	/**
@@ -60,7 +88,29 @@ public class UsersDAO extends User{
 	 * @param email(String): user mail
 	 */
 	public UsersDAO(String email){
+		User u=null;
+		ConnectionManager.getManager().getTransaction().begin();
+		try{
+			Query query = ConnectionManager.getManager().createNamedQuery("User_findbyname",User.class);
+			query.setParameter("name",email);
+			u=(User)query.getSingleResult();
+			 ConnectionManager.getManager().merge(u);
+			if(u!=null){
+				this.setId(u.getId());
+				this.setActive(u.isActive());
+				this.setMail(email);
+				this.setName(u.getName());
+				this.setPhoto(u.getPhoto());
+				this.setPlaylistCreates(u.getPlaylistCreates());
+				this.setSubscriptions(u.getPlaylistCreates());
+			}
+		}catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		ConnectionManager.getManager().getTransaction().commit();
+		ConnectionManager.CloseEntityManager();
 
+		//User_findbyname
 	}
 
 	/**
@@ -69,7 +119,32 @@ public class UsersDAO extends User{
 	 * @return int: 1 if has been updated or inserted, 0 if didn't work, -1 if error
 	 */
 	public int update(){
-		return 0;
+		int result=-1;
+		User u = new User(this.getId(),this.getMail(), this.getName(), this.getPhoto(), this.isActive());
+		u.setPlaylistCreates(this.getPlaylistCreates());
+		u.setSubscriptions(this.getSubscriptions());
+		ConnectionManager.getManager().getTransaction().begin();
+		if(u.getId()>0){
+			try{
+				ConnectionManager.getManager().merge(u);
+				result=1;
+			}catch (Exception e){
+
+			}
+		}else{
+			try{
+				ConnectionManager.getManager().persist(u);
+				ConnectionManager.getManager().flush();
+				this.setId(u.getId());
+				result=1;
+			}catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+
+		ConnectionManager.getManager().getTransaction().commit();
+		ConnectionManager.CloseEntityManager();
+		return result;
 	}
 
 	/**
@@ -77,7 +152,32 @@ public class UsersDAO extends User{
 	 * @return int: 1 if the artist has been deactivated, 0 if didn't work, -1 if error
 	 */
 	public int defuse(){
-		return 0;
+		int result=-1;
+		User u = new User(this.getId(),this.getMail(),this.getName(),this.getPhoto(),false);
+		u.setPlaylistCreates(this.getPlaylistCreates());
+		u.setSubscriptions(this.getSubscriptions());
+		ConnectionManager.getManager().getTransaction().begin();
+		if(u.getId()>0){
+			try{
+				ConnectionManager.getManager().merge(u);
+				result=1;
+			}catch (Exception e){
+
+			}
+		}else{
+			try{
+				ConnectionManager.getManager().persist(u);
+				ConnectionManager.getManager().flush();
+				this.setId(u.getId());
+				result=1;
+			}catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+
+		ConnectionManager.getManager().getTransaction().commit();
+		ConnectionManager.CloseEntityManager();
+		return result;
 	}
 
 
