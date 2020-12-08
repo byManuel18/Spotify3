@@ -90,6 +90,7 @@ public class SongDAOImpl extends SongDAO {
 		ConnectionManager.getManager().getTransaction().begin();
 		try{
 			Query query = ConnectionManager.getManager().createNamedQuery("Song_exist", Song.class);
+			query.setParameter("ID_DISC", id_disc);
 			query.setParameter("name", n);
 			s=(Song)query.getSingleResult();
 		}catch (Exception e){

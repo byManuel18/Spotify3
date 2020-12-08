@@ -25,8 +25,9 @@ import javax.persistence.Table;
 @NamedQueries({
 	@NamedQuery(name="Song_findAll", query="SELECT s FROM Song s"),
 	//@NamedQuery(name="Song_findForPlaylist", query="FROM Song WHERE id_playlist= :"),
-	@NamedQuery(name="Song_findByName", query="FROM Song WHERE NAME= :name"),
-	@NamedQuery(name="Song_findForDisc", query ="FROM Song WHERE ID_DISC= :disc")
+	@NamedQuery(name="Song_findByName", query="FROM Song WHERE NAME LIKE :name"),
+	@NamedQuery(name="Song_findForDisc", query ="FROM Song WHERE ID_DISC= :disc"),
+	@NamedQuery(name="Song_exist", query ="FROM Song WHERE ID_DISC=:id and name= :name")
 })
 public class Song implements Serializable{
 
