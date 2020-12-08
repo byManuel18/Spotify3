@@ -8,7 +8,7 @@ import model.Genre;
 import utilities.ConnectionManager;
 
 public class ArtistDAO extends Artist {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	/**

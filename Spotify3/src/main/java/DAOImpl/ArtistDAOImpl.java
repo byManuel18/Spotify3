@@ -18,7 +18,7 @@ public class ArtistDAOImpl extends ArtistDAO{
 	 * @return List<Artist>: artist selected by name
 	 */
 	public  static List<Artist> SelectbyName(String name){
-		return Search(SentenciasArtista.SELECTBYNAME, -1, "");
+		return Search(SentenciasArtista.SELECTBYNAME, -1, name);
 	}
 	/**
 	 * Search artists by id
@@ -62,6 +62,7 @@ public class ArtistDAOImpl extends ArtistDAO{
 			}
 			if(sql==SentenciasArtista.SELECTBYNAME){
 				query = ConnectionManager.getManager().createNamedQuery("Artist_byName",Artist.class);
+				query.setParameter("name", parametro+"%");
 			}
 			if(sql==SentenciasArtista.SELECTBYNACIONALIDAD){
 				query = ConnectionManager.getManager().createNamedQuery("Artist_byNationality",Artist.class);

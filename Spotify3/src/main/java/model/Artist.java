@@ -27,7 +27,7 @@ import javax.persistence.Table;
 	@NamedQuery(name="Artist_exist",
 				query="FROM Artist WHERE name= :name"),
 	@NamedQuery(name="Artist_byName",
-				query="FROM Artist WHERE name= :name"),
+				query="FROM Artist WHERE name LIKE :name"),
 	@NamedQuery(name="Artist_byNationality",
 				query="FROM Artist WHERE nationality= :nationality"),
 	@NamedQuery(name="Artist_byId",
@@ -49,8 +49,8 @@ public class Artist implements Serializable{
 	private String nationality;
 	@Column(name="PHOTO")
 	private String photo;
-	@OneToMany(mappedBy = "artist",cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	private List<Disc> disclist;
+	@OneToMany(mappedBy = "artist",cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	private List<Disc> disclist=new ArrayList<Disc>();;
 
 	public Artist() {
 		this(-1, "", "", "");
@@ -65,7 +65,6 @@ public class Artist implements Serializable{
 		this.name = name;
 		this.nationality = nationality;
 		this.photo = photo;
-		this.disclist=new ArrayList<Disc>();
 	}
 
 
