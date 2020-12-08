@@ -8,6 +8,7 @@ import java.util.Set;
 import enums.SentenciasPlayList;
 import model.Playlist;
 import model.User;
+import utilities.ConnectionManager;
 
 public class PlayListDAO extends Playlist{
 
@@ -48,6 +49,10 @@ public class PlayListDAO extends Playlist{
 	 * @param pl(PlayList)
 	 */
 	public PlayListDAO(Playlist pl){
+		this.setId(pl.getId());
+		this.setName(pl.getName());
+		this.setDescription(pl.getDescription());
+		this.setCreator(pl.getCreator());
 		}
 
 	/**
@@ -55,6 +60,13 @@ public class PlayListDAO extends Playlist{
 	 * @param id(int): playlist id
 	 */
 	public PlayListDAO(int id){
+		Playlist pl = null;
+		ConnectionManager.getManager().getTransaction().begin();
+		try{
+			pl=ConnectionManager.getManager().find(Playlist.class, id);
+		}catch (Exception e){
+
+		}
 	}
 
 	/**
@@ -63,7 +75,30 @@ public class PlayListDAO extends Playlist{
 	 * @return int: 1 if has been updated or inserted, 0 if didn't work, -1 if error
 	 */
 	public int update(){
-		return 0;
+		int result=-1;
+		Playlist pl = new Playlist(this.getName(), this.getDescription(), this.getCreator());
+		ConnectionManager.getManager().getTransaction().begin();
+		if(pl.getId()>0){
+			try{
+				ConnectionManager.getManager().merge(pl);
+				result=1;
+			}catch (Exception e){
+
+			}
+		}else{
+			try{
+				ConnectionManager.getManager().persist(pl);
+				ConnectionManager.getManager().flush();
+				this.setId(pl.getId());
+				result=1;
+			}catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+
+		ConnectionManager.getManager().getTransaction().commit();
+		ConnectionManager.CloseEntityManager();
+		return result;
 	}
 
 	/**
@@ -71,7 +106,21 @@ public class PlayListDAO extends Playlist{
 	 * @return int: 1 if the playlist has been deleted, 0 if didn't work, -1 if error
 	 */
 	public int delete(){
-		return 0;
+		int result=-1;
+		Playlist pl = new Playlist(this.getName(), this.getDescription(), this.getCreator());
+		if(pl.getId()>0){
+			ConnectionManager.getManager().getTransaction().begin();
+			try{
+				ConnectionManager.getManager().remove(ConnectionManager.getManager().contains(pl) ? pl : ConnectionManager.getManager().merge(pl));
+			}catch (Exception e) {
+				// TODO: handle exception
+				System.out.println(e.getMessage());
+			}
+			ConnectionManager.getManager().getTransaction().commit();
+			ConnectionManager.CloseEntityManager();
+		}
+
+		return result;
 	}
 
 }

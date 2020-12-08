@@ -1,9 +1,14 @@
 package DAOImpl;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.Query;
+
 import DAO.PlayListDAO;
 import enums.SentenciasPlayList;
 import model.Playlist;
+import utilities.ConnectionManager;
 
 public class PlayListDAOImpl extends PlayListDAO{
 
@@ -13,7 +18,7 @@ public class PlayListDAOImpl extends PlayListDAO{
 	 * @return List<Playlist>: playlist selected by author
 	 */
 	public static List<Playlist> SearchID_Creator(int id){
-		return null;
+		return Search(SentenciasPlayList.SELECTFORCREATOR,"",id);
 	}
 
 	/**
@@ -21,7 +26,7 @@ public class PlayListDAOImpl extends PlayListDAO{
 	 * @return List<Playlist>: all playlists
 	 */
 	public static List<Playlist> SelectAll(){
-		return null;
+		return Search(SentenciasPlayList.SELECTALL,"",-1);
 	}
 
 	/**
@@ -30,7 +35,7 @@ public class PlayListDAOImpl extends PlayListDAO{
 	 * @return List<Playlist>: playlists selected by a subscriber
 	 */
 	public static List<Playlist> SearchbyUserSubscriber(int id){
-		return null;
+		return Search(SentenciasPlayList.SELECTFORUSERSUBSCRIBER,"",id);
 	}
 
 	/**
@@ -71,7 +76,27 @@ public class PlayListDAOImpl extends PlayListDAO{
 	 * @return List<Playlist>: playlists selected based on the statement
 	 */
 	private static List<Playlist> Search(SentenciasPlayList sql,String argument, int id){
-		return null;
+		Query query =null;
+		List<Playlist> listpl= new ArrayList<Playlist>();
+		ConnectionManager.getManager().getTransaction().begin();
+		try{
+			if(sql==SentenciasPlayList.SELECTALL){
+				query = ConnectionManager.getManager().createNamedQuery("Playlist_findAll", Playlist.class);
+			}else if(sql==SentenciasPlayList.SELECTBYID){
+				query = ConnectionManager.getManager().createNamedQuery("Playlist_findById", Playlist.class);
+			}else if(sql==SentenciasPlayList.SELECTFORCREATOR){
+				query = ConnectionManager.getManager().createNamedQuery("Playlist_findForCreator", Playlist.class);
+			}else if(sql==SentenciasPlayList.SELECTFORUSERSUBSCRIBER){
+				query = ConnectionManager.getManager().createNamedQuery("Playlist_findForUser", Playlist.class);
+			}
+			listpl.addAll((List<Playlist>)query.getResultList());
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		ConnectionManager.getManager().getTransaction().commit();
+		ConnectionManager.CloseEntityManager();
+		return listpl;
 	}
 
 	/**

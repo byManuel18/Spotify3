@@ -6,6 +6,7 @@ import enums.SentenciasSong;
 import model.Disc;
 import model.Genre;
 import model.Song;
+import utilities.ConnectionManager;
 
 public class SongDAO extends Song{
 
@@ -59,7 +60,23 @@ public class SongDAO extends Song{
 	 * @param id(int): song id
 	 */
 	public SongDAO(int id){
+		Song s = null;
+		ConnectionManager.getManager().getTransaction().begin();
+		try{
+			s=ConnectionManager.getManager().find(Song.class, id);
+		}catch(Exception e){
 
+		}
+
+		ConnectionManager.getManager().getTransaction().commit();
+		ConnectionManager.CloseAllConection();
+		if(s!=null){
+			this.setId(id);
+			this.setName(s.getName());
+			this.setDuration(s.getDuration());
+			this.setGenre(s.getGenre());
+			this.setDisc(s.getDisc());
+		}
 	}
 
 	/**
@@ -68,7 +85,30 @@ public class SongDAO extends Song{
 	 * @return int: 1 if has been updated or inserted, 0 if didn't work, -1 if error
 	 */
 	public int update(){
-		return 0;
+		int result=-1;
+		Song s= new Song(this.getId(), this.getName(), this.getDuration() ,this.getGenre(), this.getDisc());
+		ConnectionManager.getManager().getTransaction().begin();
+		if(s.getId()>0){
+			try{
+				ConnectionManager.getManager().merge(s);
+				result=1;
+			}catch (Exception e){
+
+			}
+		}else{
+			try{
+				ConnectionManager.getManager().persist(s);
+				ConnectionManager.getManager().flush();
+				this.setId(s.getId());
+				result=1;
+			}catch (Exception e){
+
+			}
+		}
+
+		ConnectionManager.getManager().getTransaction().commit();
+		ConnectionManager.CloseEntityManager();
+		return result;
 	}
 
 	/**
@@ -76,7 +116,21 @@ public class SongDAO extends Song{
 	 * @return int: 1 if the song has been deleted, 0 if didn't work, -1 if error
 	 */
 	public int delete(){
-		return 0;
+		int result=-1;
+		Song s= new Song(this.getId(), this.getName(), this.getDuration() ,this.getGenre(), this.getDisc());
+		if(s.getId()>0){
+			ConnectionManager.getManager().getTransaction().begin();
+			try{
+				ConnectionManager.getManager().remove(ConnectionManager.getManager().contains(s) ? s : ConnectionManager.getManager().merge(s));
+				result=1;
+			}catch (Exception e){
+				System.out.println(e.getMessage());
+			}
+
+			ConnectionManager.getManager().getTransaction().commit();
+			ConnectionManager.CloseEntityManager();
+		}
+		return result;
 	}
 
 }

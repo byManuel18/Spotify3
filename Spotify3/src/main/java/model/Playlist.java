@@ -17,12 +17,19 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import javassist.expr.NewArray;
 
 @Entity
 @Table(name="Playlist")
+@NamedQueries({
+	@NamedQuery(name="Playlist_findAll", query="SELECT pl FROM Playlist pl"),
+	@NamedQuery(name="Playlist_findById", query="FROM Playlist WHERE ID= :id"),
+	@NamedQuery(name="Playlist_findForCreator", query="FROM Playlist WHERE ID_USER= :creator")
+})
 public class Playlist implements Serializable{
 
 	private static final long serialVersionUID = 1L;
