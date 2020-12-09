@@ -77,7 +77,7 @@ public class UsersDAO extends User{
 			this.setName(u.getName());
 			this.setPhoto(u.getPhoto());
 			this.setPlaylistCreates(u.getPlaylistCreates());
-			this.setSubscriptions(u.getPlaylistCreates());
+			this.setSubscriptions(u.getSubscriptions());
 		}
 		ConnectionManager.getManager().getTransaction().commit();
 		ConnectionManager.CloseEntityManager();
@@ -94,7 +94,7 @@ public class UsersDAO extends User{
 			Query query = ConnectionManager.getManager().createNamedQuery("User_findbyname",User.class);
 			query.setParameter("name",email);
 			u=(User)query.getSingleResult();
-			 ConnectionManager.getManager().merge(u);
+			 //ConnectionManager.getManager().merge(u);
 			if(u!=null){
 				this.setId(u.getId());
 				this.setActive(u.isActive());
@@ -102,7 +102,7 @@ public class UsersDAO extends User{
 				this.setName(u.getName());
 				this.setPhoto(u.getPhoto());
 				this.setPlaylistCreates(u.getPlaylistCreates());
-				this.setSubscriptions(u.getPlaylistCreates());
+				this.setSubscriptions(u.getSubscriptions());
 			}
 		}catch (Exception e) {
 			System.out.println(e.getMessage());

@@ -193,7 +193,12 @@ public class UserViewController extends GeneralController{
 		name_user.setText(App.getUser().getName());
 		url_user.setText(App.getUser().getPhoto());
 		email_user.setText(App.getUser().getMail());
-		img_user.setImage(new Image(App.getUser().getPhoto()));
+		try{
+			img_user.setImage(new Image(App.getUser().getPhoto()));
+		}catch (Exception e) {
+			img_user.setImage(null);
+		}
+
 		playlist_user_principal=FXCollections.observableArrayList();
 		songlist_user_principal=FXCollections.observableArrayList();
 		playlistsubs_principal=FXCollections.observableArrayList();
@@ -455,7 +460,7 @@ public class UserViewController extends GeneralController{
 		Artist n=tabla_artis.getSelectionModel().getSelectedItem();
 		if(n!=null){
 			list_disc_misplaylist_edit.clear();
-			list_disc_misplaylist_edit.addAll(n.getDisclist());
+			list_disc_misplaylist_edit.addAll(new ArtistDAO(n.getId()).getDisclist());
 		}
 	}
 	@FXML
@@ -476,12 +481,14 @@ public class UserViewController extends GeneralController{
 		Disc p=table_disc_misplaylist_edit.getSelectionModel().getSelectedItem();
 		if(p!=null){
 			lista_sog_toadd.clear();
-		}lista_sog_toadd.addAll(p.getSonglist());
+			lista_sog_toadd.addAll(new DiscDAO(p.getId()).getSonglist());
+		}
+
 
 	}
 	@FXML
 	private void ReLoad(){
-		if(playlist_user_principal!=null&&playlistsubs_principal!=null){
+		/*if(playlist_user_principal!=null&&playlistsubs_principal!=null){
 			playlist_selected=null;
 			if(lista_song_mipplaylist_edit!=null){
 				lista_song_mipplaylist_edit.clear();
@@ -492,7 +499,7 @@ public class UserViewController extends GeneralController{
 			playlistsubs_principal.clear();
 			playlist_user_principal.addAll(App.getUser().getPlaylistCreates());
 			playlistsubs_principal.addAll(App.getUser().getSubscriptions());
-		}
+		}*/
 
 
 	}
@@ -586,22 +593,40 @@ public class UserViewController extends GeneralController{
 
 		if(playlist_selected!=null){
 			Song s=table_song_toadd.getSelectionModel().getSelectedItem();
+			boolean existe=false;
 			if(s!=null){
 				if(confirm("Información", "¿Agregar canción a la lista?", "  ")){
 					Playlist ps=playlist_selected;
-					ps.getSongs().add(s);
-					PlayListDAO psd=new PlayListDAO(ps);
-					if(psd.update()>0){
-						lista_song_mipplaylist_edit.add(s);
-						ShowListasUser();
-						muestrinformacion("Información", "Canción agregada a la playlist", "  ");
+					PlayListDAO tadd=new PlayListDAO(ps);
+						for( Song so:tadd.getSongs()){
+							if(so.getId()==s.getId()){
+								existe=true;
+								break;
+							}
+						}
+						if(!existe){
+
+							ps.getSongs().add(s);
+							if(tadd.update()>0){
+								for(Playlist pls:playlist_user_principal){
+									if(pls.getId()==ps.getId()){
+										playlist_user_principal.remove(pls);
+										break;
+									}
+								}
+								lista_song_mipplaylist_edit.add(s);
+								playlist_user_principal.add(tadd);
+
+							}
 
 
-					}else{
-						muestraerror("Error", "Error en la base de datos", "Comprueba que la canción no esté ya incluida");
+						}else{
+							muestraerror("Error", "Error en la base de datos", "Comprueba que la canción no esté ya incluida");
+						}
+
 					}
 				}
-			}
+			//}
 		}
 
 	}
@@ -620,7 +645,7 @@ public class UserViewController extends GeneralController{
 				}
 				PlayListDAO psd=new PlayListDAO(ps);
 				psd.update();
-				ShowListasUser();
+				//ShowListasUser();
 
 			}
 		}
@@ -632,11 +657,19 @@ public class UserViewController extends GeneralController{
 			if(s!=null){
 				if(confirm("Información","¿Desea borrar la canción de la PlayList?", "   ")){
 					Playlist pl=playlist_selected;
-					pl.getSongs().remove(s);
-					PlayListDAO psd=new PlayListDAO(pl)
-;					if(psd.update()>0){
+					PlayListDAO psd=new PlayListDAO(pl);
+					psd.getSongs().remove(s);
+					if(psd.update()>0){
 						lista_song_mipplaylist_edit.remove(s);
-						ShowListasUser();
+						for(Playlist pls:playlist_user_principal){
+							if(pls.getId()==playlist_selected.getId()){
+								playlist_user_principal.remove(pls);
+								break;
+							}
+						}
+						playlist_user_principal.add(psd);
+						songlist_user_principal.clear();
+						//ShowListasUser();
 						muestrinformacion("Información", "Canción borrada de la playlist", "  ");
 					}else{
 						muestraerror("Error", "Error en la base de datos", " ");
@@ -705,6 +738,7 @@ public class UserViewController extends GeneralController{
 				u.getSubscriptions().remove(pl);
 				if(new UsersDAO(u).update()>0){
 					lista_allmysubs_edit.remove(pl);
+					playlistsubs_principal.remove(pl);
 					//App.getUser().setSynchro(false);
 					muestrinformacion("Información", "Se ha desuscrito correctamente", "  ");
 				}else{
@@ -718,18 +752,26 @@ public class UserViewController extends GeneralController{
 	private void Sub(){
 		Playlist pl=table_allplylist.getSelectionModel().getSelectedItem();
 		if(pl!=null){
+			boolean exist=false;
 			if(confirm("Información", "¿Suscribirse a la PlayList?", "  " )){
-				User u=App.getUser();
-				if(!u.getSubscriptions().contains(pl)){
-					u.getSubscriptions().add(pl);
+				User u=new UsersDAO(App.getUser().getId());
+				for(Playlist pls:u.getSubscriptions()){
+					if(pls.getId()==pl.getId()){
+						exist=true;
+						break;
+					}
 				}
-				if(new UsersDAO(u).update()>0){
-					lista_allmysubs_edit.add(pl);
-					//App.getUser().setSynchro(false);
-					muestrinformacion("Información", "Se ha suscrito correctamente", "  ");
+				if(!exist){
+					u.getSubscriptions().add(pl);
+					if(new UsersDAO(u).update()>0){
+						lista_allmysubs_edit.add(pl);
+						playlistsubs_principal.add(pl);
+						muestrinformacion("Información", "Se ha suscrito correctamente", "  ");
+					}
 				}else{
 					muestraerror("Error", "Error en la base de datos", " Compruebe que no esté ya suscrito ");
 				}
+
 			}
 		}
 

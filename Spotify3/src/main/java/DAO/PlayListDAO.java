@@ -66,19 +66,20 @@ public class PlayListDAO extends Playlist{
 		ConnectionManager.getManager().getTransaction().begin();
 		try{
 			pl=ConnectionManager.getManager().find(Playlist.class, id);
+			if(pl!=null){
+				this.setCreator(pl.getCreator());
+				this.setDescription(pl.getDescription());
+				this.setId(pl.getId());
+				this.setName(pl.getName());
+				this.setSongs(pl.getSongs());
+				this.setSubscribers(pl.getSubscribers());
+			}
 		}catch (Exception e){
 
 		}
 		ConnectionManager.getManager().getTransaction().commit();
 		ConnectionManager.CloseEntityManager();
-		if(pl!=null){
-			this.setCreator(pl.getCreator());
-			this.setDescription(pl.getDescription());
-			this.setId(pl.getId());
-			this.setName(pl.getName());
-			this.setSongs(pl.getSongs());
-			this.setSubscribers(pl.getSubscribers());
-		}
+
 	}
 
 	/**

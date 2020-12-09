@@ -65,12 +65,12 @@ public class Playlist implements Serializable{
 	private List<User> subscribers=new ArrayList<User>();
 
 	//N:M songs
-	/*@JoinTable(
+	@JoinTable(
 			name="rel_playlist_song",
 			joinColumns = @JoinColumn(name="id_Playlist",nullable=false),
 			inverseJoinColumns = @JoinColumn(name="id_Song",nullable=false)
-			)*/
-	@ManyToMany(cascade=CascadeType.ALL,mappedBy="playlists")
+			)
+	@ManyToMany(cascade=CascadeType.MERGE,fetch=FetchType.EAGER)
 	private List<Song> songs=new ArrayList<Song>();
 
 	public Playlist(){

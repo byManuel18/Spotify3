@@ -59,7 +59,7 @@ public class Disc implements Serializable {
 	private LocalDate date;
 
 	//1:N
-	@OneToMany(mappedBy = "disc",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "disc",cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
 	private List<Song> songlist= new ArrayList<Song>();
 
 

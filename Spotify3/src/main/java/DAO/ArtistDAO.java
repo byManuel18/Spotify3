@@ -66,7 +66,7 @@ public class ArtistDAO extends Artist {
 			a=ConnectionManager.getManager().find(Artist.class, id);
 
 			if(a!=null){
-				ConnectionManager.getManager().merge(a);
+				//ConnectionManager.getManager().merge(a);
 				this.setId(id);
 				this.setName(a.getName());
 				this.setNationality(a.getNationality());

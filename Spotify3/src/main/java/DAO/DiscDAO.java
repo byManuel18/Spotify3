@@ -67,10 +67,13 @@ public class DiscDAO extends Disc{
 		try{
 			d=ConnectionManager.getManager().find(Disc.class,id);
 			if(d!=null){
-				ConnectionManager.getManager().merge(d);
-
-
-
+				//ConnectionManager.getManager().merge(d);
+				this.setId(id);
+				this.setName(d.getName());
+				this.setDate(d.getDate());
+				this.setPhoto(d.getPhoto());
+				this.setSonglist(d.getSonglist());
+				this.setArtist(d.getArtist());
 			}
 		}catch(Exception e){
 			System.out.println(e.getMessage());
@@ -78,12 +81,7 @@ public class DiscDAO extends Disc{
 
 		ConnectionManager.getManager().getTransaction().commit();
 		ConnectionManager.CloseEntityManager();
-		this.setId(id);
-		this.setName(d.getName());
-		this.setDate(d.getDate());
-		this.setPhoto(d.getPhoto());
-		this.setSonglist(d.getSonglist());
-		this.setArtist(d.getArtist());
+
 
 	}
 

@@ -21,21 +21,12 @@ public class ArtistDAOImpl extends ArtistDAO{
 		return Search(SentenciasArtista.SELECTBYNAME, -1, name);
 	}
 	/**
-	 * Search artists by id
-	 * @param id(int): Artist id
-	 * @return List<Artist>: artist selected by id
-	 */
-	public  static List<Artist> SelectbyId(int id){
-		return Search(SentenciasArtista.SELECTBYID, id, "");
-	}
-
-	/**
 	 * Search artists by nationality
 	 * @param nationality(String): Artist nationality
 	 * @return List<Artist>: artist selected by nationality
 	 */
 	public  static List<Artist> SelectbyNacionalidad(String nationality){
-		return Search(SentenciasArtista.SELECTBYNACIONALIDAD, -1, "");
+		return Search(SentenciasArtista.SELECTBYNACIONALIDAD, -1, nationality);
 	}
 
 	/**
@@ -66,12 +57,8 @@ public class ArtistDAOImpl extends ArtistDAO{
 			}
 			if(sql==SentenciasArtista.SELECTBYNACIONALIDAD){
 				query = ConnectionManager.getManager().createNamedQuery("Artist_byNationality",Artist.class);
-				query.setParameter("nationality", parametro);
+				query.setParameter("nationality", parametro+"%");
 			}
-			/*if(sql==SentenciasArtista.SELECTBYID){
-				query = ConnectionManager.getManager().createNamedQuery("Artist_byId", Artist.class);
-				query.setParameter("id", parametro);
-				}*/
 			lista.addAll((List<Artist>)query.getResultList());
 		}catch (Exception e) {
 			// TODO: handle exception

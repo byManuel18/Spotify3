@@ -3,8 +3,10 @@ package discography.Spotify3;
 import DAO.ArtistDAO;
 import DAO.DiscDAO;
 import DAO.GenreDAO;
+import DAO.UsersDAO;
 import DAOImpl.ArtistDAOImpl;
 import DAOImpl.GenreDAOImpl;
+import DAOImpl.UsersDAOImpl;
 import enums.TypeBDD;
 import model.Artist;
 import model.Genre;
@@ -89,10 +91,25 @@ public class tests {
 			System.out.println(a);
 		}*/
 	//	ConnectionManager.getManager().getTransaction().begin();
-		
+
 		//ArtistDAO n=new ArtistDAO(2);
 		//System.out.println(n);
 	//	ConnectionManager.getManager().getTransaction().commit();
+		/*List<User> listau=UsersDAOImpl.SelectAllSubscribers();
+		for(User u:listau){
+			UsersDAO n=new UsersDAO(u.getId());
+			for(Playlist p:n.getPlaylistCreates()){
+				System.out.println(p);
+			}
+		}*/
+		User u=new UsersDAO(12);
+		System.out.println(u);
+		for(Playlist pl:u.getPlaylistCreates()){
+			System.out.println(pl);
+		}
+		for(Playlist pl:u.getSubscriptions()){
+			System.out.println(pl);
+		}
     	ConnectionManager.CloseAllConection(); //NO BORRAR ESTA LÏNEA NUNCA; DEJADLA AL FINAL DE TODO
 
 	}

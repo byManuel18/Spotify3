@@ -64,19 +64,20 @@ public class SongDAO extends Song{
 		ConnectionManager.getManager().getTransaction().begin();
 		try{
 			s=ConnectionManager.getManager().find(Song.class, id);
+			if(s!=null){
+				this.setId(id);
+				this.setName(s.getName());
+				this.setDuration(s.getDuration());
+				this.setGenre(s.getGenre());
+				this.setDisc(s.getDisc());
+			}
 		}catch(Exception e){
 
 		}
 
 		ConnectionManager.getManager().getTransaction().commit();
 		ConnectionManager.CloseAllConection();
-		if(s!=null){
-			this.setId(id);
-			this.setName(s.getName());
-			this.setDuration(s.getDuration());
-			this.setGenre(s.getGenre());
-			this.setDisc(s.getDisc());
-		}
+
 	}
 
 	/**
@@ -87,7 +88,6 @@ public class SongDAO extends Song{
 	public int update(){
 		int result=-1;
 		Song s= new Song(this.getId(), this.getName(), this.getDuration() ,this.getGenre(), this.getDisc());
-		System.out.println(s+"    "+s.getDisc());
 		ConnectionManager.getManager().getTransaction().begin();
 		if(s.getId()>0){
 			try{

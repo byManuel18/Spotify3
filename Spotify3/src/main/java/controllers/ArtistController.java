@@ -239,8 +239,11 @@ public class ArtistController extends GeneralController {
 
 	@FXML
 	private void ShowDisc() {
-
-			disc =dist_table.getSelectionModel().getSelectedItem();
+		Disc dc=dist_table.getSelectionModel().getSelectedItem();
+		if(dc!=null){
+			disc=new DiscDAO(dc.getId());
+		}
+		//disc =dist_table.getSelectionModel().getSelectedItem();
 
 		if (disc != null) {
 			song = null;
@@ -373,7 +376,14 @@ public class ArtistController extends GeneralController {
 			if (confirm("Informaciónn", "¿Eliminar Artista?", "   ")) {
 				ArtistDAO d = new ArtistDAO(get);
 				if (d.delete() > 0) {
-					artistlist_.remove(get);
+					System.out.println(get);
+					for(Artist a:artistlist_){
+						if(a.getId()==get.getId()){
+							artistlist_.remove(a);
+							get=null;
+							break;
+						}
+					}
 					ClearArtist();
 					muestrinformacion("Información", "Eliminado correctamente", "   ");
 				} else {
@@ -438,9 +448,8 @@ public class ArtistController extends GeneralController {
 				disc.setPhoto(url_disc.getText());
 				DiscDAO toupdate = new DiscDAO(disc);
 				if (toupdate.update() > 0) {
-
 					for(Disc a:discarlist){
-						if(a.getId()==get.getId()){
+						if(a.getId()==disc.getId()){
 							discarlist.remove(a);
 							break;
 						}
@@ -489,7 +498,14 @@ public class ArtistController extends GeneralController {
 			if (confirm("Información", "¿Eliminar disco?", "   ")) {
 				DiscDAO d = new DiscDAO(disc);
 				if (d.delete() > 0) {
-					discarlist.remove(disc);
+					for(Disc di:discarlist){
+						if(di.getId()==disc.getId()){
+							discarlist.remove(di);
+							disc=null;
+							break;
+						}
+					}
+
 					ClearDisc();
 					muestrinformacion("Información", "Disco eliminado correctamente", "    ");
 				} else {
@@ -501,7 +517,11 @@ public class ArtistController extends GeneralController {
 
 	@FXML
 	private void ShowSong() {
-		song = song_list.getSelectionModel().getSelectedItem();
+		Song s=song_list.getSelectionModel().getSelectedItem();
+		if(s!=null){
+			song=new SongDAO(s.getId());
+		}
+		//song = song_list.getSelectionModel().getSelectedItem();
 		if (song != null) {
 			genero_song.setValue(null);
 			name_song.setText(song.getName());
@@ -563,9 +583,17 @@ public class ArtistController extends GeneralController {
 	private void deleteSong() {
 		if (song != null) {
 			if (confirm("Información", "¿Eliminar canción?", "    ")) {
+				disc.getSonglist().remove(song);
 				SongDAO s = new SongDAO(song);
 				if (s.delete() > 0) {
-					songlist.remove(song);
+					for(Song so:songlist){
+						if(so.getId()==song.getId()){
+							songlist.remove(so);
+							song=null;
+							break;
+						}
+					}
+
 					ClearSong();
 					muestrinformacion("Información", "Canción eliminada correctamente", "   ");
 				} else {

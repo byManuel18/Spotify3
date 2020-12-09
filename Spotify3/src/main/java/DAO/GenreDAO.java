@@ -57,16 +57,17 @@ public class GenreDAO extends Genre{
 		ConnectionManager.getManager().getTransaction().begin();
 		try{
 			g=ConnectionManager.getManager().find(Genre.class, id);
+			if(g!=null){
+				this.setId(id);
+				this.setName(g.getName());
+			}
 		}catch (Exception e) {
 			// TODO: handle exception
 		}
 
 		ConnectionManager.getManager().getTransaction().commit();
 		ConnectionManager.CloseEntityManager();
-		if(g!=null){
-			this.setId(id);
-			this.setName(g.getName());
-		}
+
 
 	}
 

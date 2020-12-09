@@ -1,6 +1,7 @@
 package enums;
 
 public enum SentenciasUsers {
+	SELECTALL("Select * from usuario"),
 	INSERTUSERS("INSERT INTO usuario (nombre,correo,foto,activo) VALUES(?,?,?,?)"),
 	SELECTBYID("SELECT * FROM usuario WHERE id=?"),
 	UPDATEUSER("UPDATE usuario SET nombre=?,correo=?,foto=?,activo=? WHERE id=?"),

@@ -24,7 +24,6 @@ import javax.persistence.Table;
 @Table(name="SONG")
 @NamedQueries({
 	@NamedQuery(name="Song_findAll", query="SELECT s FROM Song s"),
-	//@NamedQuery(name="Song_findForPlaylist", query="FROM Song WHERE id_playlist= :"),
 	@NamedQuery(name="Song_findByName", query="FROM Song WHERE NAME LIKE :name"),
 	@NamedQuery(name="Song_findForDisc", query ="FROM Song WHERE ID_DISC= :disc"),
 	@NamedQuery(name="Song_exist", query ="FROM Song WHERE ID_DISC=:id and name= :name")
@@ -45,24 +44,14 @@ public class Song implements Serializable{
 	private int duration;
 
 	//1:N
-	@ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+	@ManyToOne(cascade=CascadeType.MERGE,fetch=FetchType.EAGER)
 	@JoinColumn(name="ID_GENRE")
 	private Genre genre;
 
 	//1:M
-	@ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="ID_DISC")
 	private Disc disc;
-
-	//N:M playlist
-	@JoinTable(
-		name="rel_song_playlist",
-		joinColumns = @JoinColumn(name = "ID_SONG", nullable=false),
-		inverseJoinColumns = @JoinColumn(name="id_Playlist", nullable=false)
-			)
-	@ManyToMany(cascade= CascadeType.ALL,fetch=FetchType.LAZY)
-	private List<Playlist> playlists = new ArrayList<Playlist>();
-
 
 	public Song(){
 		this(-1,"",0,null,null);
@@ -79,15 +68,6 @@ public class Song implements Serializable{
 		this.genre = genre;
 		this.disc = disc;
 	}
-
-	/*public List<Playlist> getPlaylists() {
-		return playlists;
-	}
-
-	public void setPlaylists(List<Playlist> playlists) {
-		this.playlists = playlists;
-		List<Song> ls=this.playlists.
-	}*/
 
 	public int getId() {
 		return id;

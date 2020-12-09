@@ -24,6 +24,8 @@ import javax.persistence.Table;
 @NamedQueries({
 	@NamedQuery(name="User_findbyname",
 	            query="FROM User WHERE MAIL= :name"),
+	@NamedQuery(name="User_findAll",
+    query="FROM User"),
 })
 public class User implements Serializable{
 	/**
@@ -48,11 +50,11 @@ public class User implements Serializable{
 				inverseJoinColumns = @JoinColumn(name="id_Playlist",nullable=false),
 			    joinColumns = @JoinColumn(name="id_User",nullable=false)
 			)
-	@ManyToMany(cascade=CascadeType.ALL)
+	@ManyToMany(fetch=FetchType.LAZY)
 	private List<Playlist> subscriptions=new ArrayList<Playlist>();
 
 	//1:N
-	@OneToMany(mappedBy="creator",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="creator",cascade=CascadeType.MERGE,fetch=FetchType.LAZY)
 	private List<Playlist> playlistCreates=new ArrayList<Playlist>();
 
 	public User(){
